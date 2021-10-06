@@ -1,6 +1,7 @@
 flask
 gunicorn>20.0.4
 flask_cors
+awscli
 boto3
 jsonify
 requests
