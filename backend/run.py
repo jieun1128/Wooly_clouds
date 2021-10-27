@@ -55,8 +55,8 @@ def visualize():
         region_name= userInfo[2]
     )
 
-    ec2 = ec2List(boto_session,'i-0c7e2dbf9143e5ee0')
-    s3 = s3List(boto_session,"woolycloudbucket")
+    ec2 = ec2List(boto_session,'')
+    s3 = s3List(boto_session,"")
 
     instanceList = {
         'ec2' : ec2,
