@@ -5,3 +5,4 @@ awscli
 boto3
 jsonify
 requests
+flask_swagger_ui

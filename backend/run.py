@@ -1,73 +1,51 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, jsonify, session
+from flask_cors import CORS
 import boto3
+import botocore
+from flask_swagger_ui import get_swaggerui_blueprint
 
-app = Flask(__name__)
-ec2_client = boto3.client("ec2", region_name="ap-northeast-2")
+app = Flask(__name__,static_url_path='',static_folder="templates") 
+app.config['SECRET_KEY'] = 'wcsfeufhwiquehfdx'
+CORS(app)
+SWAGGER_URL = '/swagger'
+API_URL = '/swagger.json'
+swaggerui_blueprint = get_swaggerui_blueprint(
+    SWAGGER_URL,
+    API_URL,
+    config = {
+        'app_name' : "Wooly_Clouds"
+    }
+)
+
+app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL)
 
 @app.route('/')
 def index():
-   # boto()
-    #create_instance()
-    #deleteInstance()
     return render_template('new.html')
 
-def boto():
-    reservations = ec2_client.describe_instances(Filters=[
-        {
-            "Name" : "instance-state-name",
-            "Values" : ["running"],
-        }
-    ]).get("Reservations")
-    for reservation in reservations:
-        print(reservation["Instances"])
-        for instance in reservation["Instances"]:
-            instance_id = instance["InstanceId"]
-            instance_type = instance["InstanceType"]
-            public_ip = instance["PublicIpAddress"]
-            private_ip = instance["PrivateIpAddress"]
-            subnet_id = instance["SubnetId"]
-            vpc_id = instance["VpcId"]
+@app.route('/login',methods=['GET','POST'])
+def login():
+    if request.method == 'GET':
+        return render_template('login.html')
+    else :
+        public_access = request.form['public']
+        secret = request.form['secret']
+        region = request.form['region']
+        try :
+            boto_session = boto3.Session(
+                aws_access_key_id = public_access,
+                aws_secret_access_key = secret,
+                region_name = region 
+            )
+            ec2_client = boto_session.client('ec2')
+            ec2_client.describe_instances()
+            session['boto_session'] = [public_access, secret, region]
+        except botocore.exceptions.ClientError:
+            return "key 입력을 다시 확인해 주세요"
 
-            print(f"{instance_id}, {instance_type}, {public_ip}, {private_ip}, {subnet_id}, {vpc_id}")
+        return "login success"
 
-def create_instance():
-    ec2 = boto3.resource('ec2')
-
-    # 인스턴스 생성 
-    instances = ec2.create_instances(
-        ImageId='ami-0ba5cd124d7a79612',
-        InstanceType='t2.micro',
-        MaxCount=1,
-        MinCount=1,
-        NetworkInterfaces=[{
-        'SubnetId': "subnet-06cf995b42d89862f",
-        'DeviceIndex': 0,
-        'AssociatePublicIpAddress': True,
-        'Groups': ["sg-015bc3d5c02501a5d"]
-        }],
-    KeyName='my_key')
-    
-    instance = instances[0]
-
-    # 인스턴스 이름 지정 
-    instance.create_tags(
-            Tags=[{"Key": "Name", "Value": "newInstance"}])
-
-    # 생성될 때까지 기다리기 
-    instance.wait_until_running()
-
-    # 생성 후 정보 출력 
-    print('Instance Id: ', instance.id)
-    print('Connect Ec2 instance with the following SSH command once initializing process gets completed.')
-    print('Check AWS console for current status.')
-    print('ssh -i "{}.pem" {}@{}'.format("ec2-keypair",
-              'ec2-user', instance.public_ip_address))
-
-
-def deleteInstance():
-    response = ec2_client.terminate_instances(InstanceIds=["i-01f2977637288ef27"])
-    print(response)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(port=3000, debug=True)
 
