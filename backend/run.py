@@ -3,6 +3,7 @@ from flask_cors import CORS
 import boto3
 import botocore
 from flask_swagger_ui import get_swaggerui_blueprint
+from Instance import ec2List, s3List
 
 app = Flask(__name__,static_url_path='',static_folder="templates") 
 app.config['SECRET_KEY'] = 'wcsfeufhwiquehfdx'
@@ -44,6 +45,25 @@ def login():
             return "key 입력을 다시 확인해 주세요"
 
         return "login success"
+
+@app.route('/visualize', methods=['GET'])
+def visualize():
+    userInfo = session.get('boto_session',None)
+    boto_session = boto3.Session(
+        aws_access_key_id= userInfo[0],
+        aws_secret_access_key = userInfo[1],
+        region_name= userInfo[2]
+    )
+
+    ec2 = ec2List(boto_session,'i-0c7e2dbf9143e5ee0')
+    s3 = s3List(boto_session,"woolycloudbucket")
+
+    instanceList = {
+        'ec2' : ec2,
+        's3' : s3
+    }
+
+    return instanceList # rendering 필요 
 
 
 if __name__ == '__main__':
