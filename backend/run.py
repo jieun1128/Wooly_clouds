@@ -3,7 +3,7 @@ from flask_cors import CORS
 import boto3
 import botocore
 from flask_swagger_ui import get_swaggerui_blueprint
-from Instance import ec2List, s3List
+from Instance import ec2List, s3List, VPCList
 
 app = Flask(__name__,static_url_path='',static_folder="templates") 
 app.config['SECRET_KEY'] = 'wcsfeufhwiquehfdx'
@@ -56,11 +56,13 @@ def visualize():
     )
 
     ec2 = ec2List(boto_session,'')
-    s3 = s3List(boto_session,"")
+    s3 = s3List(boto_session,'')
+    vpc = VPCList(boto_session,'')
 
     instanceList = {
         'ec2' : ec2,
-        's3' : s3
+        's3' : s3,
+        'vpc' : vpc
     }
 
     return instanceList # rendering 필요 
