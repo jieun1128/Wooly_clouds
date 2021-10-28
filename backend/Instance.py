@@ -96,7 +96,19 @@ def VPCList(boto_session, option):
                 raise
     return vpcInfo
 
+# def subnetList(boto_session, option):
+#     ec2_client = boto_session.client('ec2')
 
+#     if option == "" :       # 모든 VPC List 불러오기 
+#         responses = ec2_client.describe_subnets()
+#         # vpcList = []
+#         # for response in responses :
+#         #     vpcList.append(response['VpcId'])
+#         # return vpcList
+#         print(responses)
+#         return
+#     else: 
+#         return
 
 
 
