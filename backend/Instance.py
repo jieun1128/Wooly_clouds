@@ -17,15 +17,19 @@ def ec2List(boto_session, option):
             response = ec2_client.describe_instances(InstanceIds=[option]).get('Reservations')[0]['Instances'][0]
             ec2Info['InstanceId'] = response['InstanceId']
             ec2Info['ImageId'] = response['ImageId']
-            ec2Info["InstanceType"] = response['InstanceType']
-            ec2Info["State"] = response['State']['Name']
-            ec2Info["Subnet_Id"] = response["SubnetId"]
-            ec2Info["VpcId"] = response["VpcId"]
+            ec2Info['InstanceType'] = response['InstanceType']
+            ec2Info['State'] = response['State']['Name']
+            ec2Info['Subnet_Id'] = response['SubnetId']
+            ec2Info['VpcId'] = response['VpcId']
+            ec2Info['Name'] = response['Tags'][0]['Value']
+            ec2Info['KeyName'] = response['KeyName']
+            ec2Info['GroupName'] = response['SecurityGroups'][0]['GroupName']
+            ec2Info['GroupId'] = response['SecurityGroups'][0]['GroupId']
             if response['State']['Name'] == 'running':
-                ec2Info["PrivateDnsName"] = response['PrivateDnsName']
-                ec2Info["PrivateIpAddress"] = response['PrivateIpAddress']
-                ec2Info["PublicDnsName"] = response['PublicDnsName']
-                ec2Info["PublicIpAddress"] = response['PublicIpAddress']
+                ec2Info['PrivateDnsName'] = response['PrivateDnsName']
+                ec2Info['PrivateIpAddress'] = response['PrivateIpAddress']
+                ec2Info['PublicDnsName'] = response['PublicDnsName']
+                ec2Info['PublicIpAddress'] = response['PublicIpAddress']
             else :
                 ec2Info["PrivateDnsName"] = ''
                 ec2Info["PrivateIpAddress"] = ''
