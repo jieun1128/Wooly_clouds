@@ -1,20 +1,22 @@
 import boto3
 import botocore
 
-def ec2List(boto_session, option):
+def ec2List(boto_session, option, ID):
     ec2_client = boto_session.client('ec2')
-    if option == "": # 모든 ec2 인스턴스 정보 불러오기 
+    if option == 1: # 모든 ec2 인스턴스 정보 불러오기 
         ec2List = []
         responses = ec2_client.describe_instances().get("Reservations")
         for response in responses :
             for instance in response["Instances"]:
                 ec2List.append([instance["InstanceId"],instance["SubnetId"],instance["VpcId"]])
         return ec2List
+    elif option == 2: # 인스턴스 종료하기
+        print(1)
     else : # 특정 ec2 인스턴스 정보 불러오기 
         try:
             # Describe an instance
             ec2Info = dict()
-            response = ec2_client.describe_instances(InstanceIds=[option]).get('Reservations')[0]['Instances'][0]
+            response = ec2_client.describe_instances(InstanceIds=[ID]).get('Reservations')[0]['Instances'][0]
             ec2Info['InstanceId'] = response['InstanceId']
             ec2Info['ImageId'] = response['ImageId']
             ec2Info['InstanceType'] = response['InstanceType']
