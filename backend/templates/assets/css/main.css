@@ -3988,7 +3988,7 @@ body.subpage {
 	background-color: #000;
 	height: 100%;
 	left: 0;
-	opacity: 0.45;
+	opacity: 0.1;
 	position: absolute;
 	top: 0;
 	width: 100%;
@@ -4222,7 +4222,7 @@ body.is-loading #banner:before {
 	background-color: #000;
 	height: 100%;
 	left: 0;
-	opacity: 0.45;
+	opacity: 0.1;
 	position: absolute;
 	top: 0;
 	width: 100%;
