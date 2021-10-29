@@ -102,6 +102,46 @@
             }
           }
         }
+      },
+
+      "/option/{option}/type/{type}/ID/{ID}":{
+        "get": {
+          "tags": [
+            {
+              "name" : "Stop or Terminate Information"
+            }
+          ],
+          "parameters":[
+            {
+              "name" : "option",
+              "in" : "path",
+              "required" : true,
+              "description" : "Whether it's terminated or deleted"
+            },
+            {
+              "name" : "type",
+              "in" : "path",
+              "required" : true,
+              "description" : "Type of Required Instance",
+              "type" : "string"
+            },
+            {
+              "name" : "instanceId",
+              "in" : "path",
+              "required" : "true",
+              "description" : "ID of Required Instance",
+              "type" : "string"
+            }
+          ],
+          "responses": {
+            "200":{
+              "description" : "OK"
+            },
+            "400": {
+              "description": "Failed. Bad post data."
+            }
+          }
+        }
       }
 
     },

@@ -1,7 +1,7 @@
 import boto3
 import botocore
 
-def ec2List(boto_session, option, ID):
+def ec2List(boto_session, option, instanceID):
     ec2_client = boto_session.client('ec2')
     if option == 1: # 모든 ec2 인스턴스 정보 불러오기 
         ec2List = []
@@ -10,13 +10,11 @@ def ec2List(boto_session, option, ID):
             for instance in response["Instances"]:
                 ec2List.append([instance["InstanceId"],instance["SubnetId"],instance["VpcId"]])
         return ec2List
-    elif option == 2: # 인스턴스 종료하기
-        print(1)
-    else : # 특정 ec2 인스턴스 정보 불러오기 
+    elif option == 2 : # 특정 ec2 인스턴스 정보 불러오기 
         try:
             # Describe an instance
             ec2Info = dict()
-            response = ec2_client.describe_instances(InstanceIds=[ID]).get('Reservations')[0]['Instances'][0]
+            response = ec2_client.describe_instances(InstanceIds=[instanceID]).get('Reservations')[0]['Instances'][0]
             ec2Info['InstanceId'] = response['InstanceId']
             ec2Info['ImageId'] = response['ImageId']
             ec2Info['InstanceType'] = response['InstanceType']
@@ -44,13 +42,18 @@ def ec2List(boto_session, option, ID):
             else:
                 raise
         return ec2Info
+    elif option == 3:           # 인스턴스 중지하기
+        return "인스턴스 중지 완료"
+    else :                      # 인스턴스 삭제하기  (option == 4 일경우)
+        return "인스턴스 삭제 완료"
+        
 
 
-def s3List(boto_session, option):
+def s3List(boto_session, option, instanceID):
     s3_client = boto_session.client('s3')
 
 
-    if option == "" :    # 모든 s3 인스턴스 정보 불러오기 
+    if option == 1 :    # 모든 s3 인스턴스 정보 불러오기 
         list_buckets_resp = s3_client.list_buckets()
         bucketList = []
 
@@ -58,9 +61,9 @@ def s3List(boto_session, option):
             bucketList.append(bucket['Name'])
 
         return bucketList
-    else:               # 특정 s3 인스턴스 정보 불러오기 
+    elif option == 2:               # 특정 s3 인스턴스 정보 불러오기 
         try:
-            s3objects = s3_client.list_objects_v2(Bucket=option)
+            s3objects = s3_client.list_objects_v2(Bucket=instanceID)
 
         except botocore.exceptions.ClientError as e:
             if e.response['Error']['Code'] == "NoSuchBucket":
@@ -71,21 +74,23 @@ def s3List(boto_session, option):
                 raise
         
         return s3objects['Name']
+    elif option == 3:               # s3 인스턴스 삭제하기 
+        return "삭제 완료"
 
 
-def VPCList(boto_session, option):
+def VPCList(boto_session, option, vpcID):
     ec2_client = boto_session.client('ec2')
 
-    if option == "" :       # 모든 VPC List 불러오기 
+    if option == 1 :       # 모든 VPC List 불러오기 
         responses = ec2_client.describe_vpcs().get("Vpcs")
         vpcList = []
         for response in responses :
             vpcList.append(response['VpcId'])
         return vpcList
-    else:                   # 특정 VPC 정보 불러오기 
+    elif option == 2:                   # 특정 VPC 정보 불러오기 
         try :
             vpcInfo = dict()
-            response = ec2_client.describe_vpcs(VpcIds=[option]).get("Vpcs")[0]
+            response = ec2_client.describe_vpcs(VpcIds=[vpcID]).get("Vpcs")[0]
             vpcInfo['VpcId'] = response['VpcId']
             vpcInfo['CidrBlock'] = response['CidrBlock']
             vpcInfo['State'] = response['State']

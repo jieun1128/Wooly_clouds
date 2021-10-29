@@ -55,12 +55,14 @@ def visualize():
         region_name= userInfo[2]
     )
 
-    ec2 = ec2List(boto_session,'i-0c7e2dbf9143e5ee0')
-    s3 = s3List(boto_session,'')
-    vpc = VPCList(boto_session,'')
+    ec2 = ec2List(boto_session,1, '')
+    s3 = s3List(boto_session,1, '')
+    vpc = VPCList(boto_session, 1,'')
 
     instanceList = {
-        'ec2' : ec2
+        'ec2' : ec2,
+        's3' : s3,
+        'vpc' : vpc
     }
 
     return instanceList # rendering 필요 
@@ -77,14 +79,32 @@ def information(_type, _instanceId):
     )
     
     if _type == 'ec2' :
-        result = ec2List(boto_session, _instanceId)
+        result = ec2List(boto_session, 2, _instanceId)
     elif _type == 's3':
-        result = s3List(boto_session, _instanceId)
+        result = s3List(boto_session, 2, _instanceId)
     elif _type == 'vpc':
-        result = VPCList(boto_session, _instanceId)
+        result = VPCList(boto_session, 2, _instanceId)
 
     
     return result # rendering 필요 
+
+@app.route('/option/<string:_option>/type/<string:_type>/ID/<string:_instanceId>', methods=['GET'])
+def stopInstance(_option, _type, _instanceId):
+    userInfo = session.get('boto_session',None)
+    boto_session = boto3.Session(
+        aws_access_key_id= userInfo[0],
+        aws_secret_access_key = userInfo[1],
+        region_name= userInfo[2]
+    )
+    if _type == 'ec2':
+        if _option == '3': # option == 3이면 인스턴스 중지 
+            result = ec2List(boto_session, 3, _instanceId)
+        elif _option == '4': # option == 4면 인스턴스 삭제
+            result = ec2List(boto_session, 4, _instanceId)
+    else :
+        result = s3List(boto_session, 4, _instanceId) # s3 인스턴스를 삭제한다. 그런데 ec2와는 다르게 ID가 아니라 인스턴스의 이름을 보내야 한다.
+
+    return result
 
 
 if __name__ == '__main__':
