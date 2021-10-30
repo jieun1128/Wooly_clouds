@@ -1,4 +1,4 @@
-import boto3
+from boto3 import session
 import botocore
 
 def ec2List(boto_session, option, instanceID):
@@ -43,13 +43,29 @@ def ec2List(boto_session, option, instanceID):
                 raise
         return ec2Info
     elif option == 3:           # 인스턴스 중지하기
+        try:
+            # Stop an instance
+            ec2_client.stop_instances(InstanceIds=[instanceID], DryRun=False)
+        except botocore.exceptions.ClientError as e:
+            if e.response['Error']['Code'] == "InvalidInstanceID.Malformed":
+                print("Error: Invalid instance id!!")
+            else:
+                raise
         return "인스턴스 중지 완료"
     else :                      # 인스턴스 삭제하기  (option == 4 일경우)
+        try:
+            # Terminate an instance
+            ec2_client.terminate_instances(InstanceIds=[instanceID], DryRun=False)
+        except botocore.exceptions.ClientError as e:
+            if e.response['Error']['Code'] == "InvalidInstanceID.Malformed":
+                print("Error: Invalid instance id!!")
+            else:
+                raise
         return "인스턴스 삭제 완료"
         
 
 
-def s3List(boto_session, option, instanceID):
+def s3List(boto_session, option, bucketName):
     s3_client = boto_session.client('s3')
 
 
@@ -63,18 +79,25 @@ def s3List(boto_session, option, instanceID):
         return bucketList
     elif option == 2:               # 특정 s3 인스턴스 정보 불러오기 
         try:
-            s3objects = s3_client.list_objects_v2(Bucket=instanceID)
+            s3objects = s3_client.list_objects_v2(Bucket=bucketName)
 
         except botocore.exceptions.ClientError as e:
             if e.response['Error']['Code'] == "NoSuchBucket":
-                print("Error: Bucket does not exist!!")
+                return "Error: Bucket does not exist!!"
             elif e.response['Error']['Code'] == "InvalidBucketName":
-                print("Error: Invalid Bucket name!!")
+                return "Error: Invalid Bucket name!!"
             else:
                 raise
         
         return s3objects['Name']
     elif option == 3:               # s3 인스턴스 삭제하기 
+        try:
+            s3_client.terminate_instances(InstanceIds=[bucketName], DryRun=False)
+        except botocore.exceptions.ClientError as e:
+            if e.response['Error']['Code'] == "InvalidInstanceID.Malformed":
+                print("Error: Invalid instance id!!")
+            else:
+                raise
         return "삭제 완료"
 
 
@@ -95,27 +118,42 @@ def VPCList(boto_session, option, vpcID):
             vpcInfo['CidrBlock'] = response['CidrBlock']
             vpcInfo['State'] = response['State']
             vpcInfo['Name'] = response['Tags'][0]['Value']
+            vpcInfo['AvailabilityZone'] = response['AvailabilityZone']
 
         except botocore.exceptions.ClientError as e:
             if e.response['Error']['Code'] == "MissingParameter":
                 print("Error: Missing instance id!!")
             else:
                 raise
-    return vpcInfo
+        return vpcInfo
 
-# def subnetList(boto_session, option):
-#     ec2_client = boto_session.client('ec2')
+def subnetList(boto_session, option, subnetID):
+    ec2_client = boto_session.client('ec2')
 
-#     if option == "" :       # 모든 VPC List 불러오기 
-#         responses = ec2_client.describe_subnets()
-#         # vpcList = []
-#         # for response in responses :
-#         #     vpcList.append(response['VpcId'])
-#         # return vpcList
-#         print(responses)
-#         return
-#     else: 
-#         return
+    if option == 1 :       # 모든 VPC List 불러오기 
+        responses = ec2_client.describe_subnets().get('Subnets')
+        subnetList = []
+        for response in responses :
+            subnetList.append([response['SubnetId'],response['VpcId']])
+        return subnetList
+    elif option == 2:
+        try :
+            subnetInfo = dict()
+            response = ec2_client.describe_subnets(SubnetIds=[subnetID]).get("Subnets")[0]
+            subnetInfo['SubnetId'] = response['SubnetId']
+            subnetInfo['VpcId'] = response['VpcId']
+            subnetInfo['AvailabilityZone'] = response['AvailabilityZone']
+            subnetInfo['CidrBlock'] = response['CidrBlock']
+            subnetInfo['State'] = response['State']
+            subnetInfo['Name'] = response['Tags'][0]['Value']
+
+        except botocore.exceptions.ClientError as e:
+            if e.response['Error']['Code'] == "MissingParameter":
+                print("Error: Missing instance id!!")
+            else:
+                raise
+        return subnetInfo
+    
 
 
 

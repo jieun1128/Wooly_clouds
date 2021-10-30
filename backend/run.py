@@ -3,7 +3,7 @@ from flask_cors import CORS
 import boto3
 import botocore
 from flask_swagger_ui import get_swaggerui_blueprint
-from Instance import ec2List, s3List, VPCList
+from Instance import ec2List, s3List, VPCList, subnetList
 
 app = Flask(__name__,static_url_path='',static_folder="templates") 
 app.config['SECRET_KEY'] = 'wcsfeufhwiquehfdx'
@@ -46,6 +46,12 @@ def login():
 
         return "login success"
 
+@app.route('/logout', methods=['GET'])
+def logout():
+    session.pop('boto_session', None)
+    return render_template('new.html')
+
+
 @app.route('/visualize', methods=['GET'])
 def visualize():
     userInfo = session.get('boto_session',None)
@@ -55,6 +61,7 @@ def visualize():
         region_name= userInfo[2]
     )
 
+    subnet = subnetList(boto_session,1, '')
     ec2 = ec2List(boto_session,1, '')
     s3 = s3List(boto_session,1, '')
     vpc = VPCList(boto_session, 1,'')
@@ -62,7 +69,8 @@ def visualize():
     instanceList = {
         'ec2' : ec2,
         's3' : s3,
-        'vpc' : vpc
+        'vpc' : vpc,
+        'subnet' : subnet
     }
 
     return instanceList # rendering 필요 
@@ -84,6 +92,8 @@ def information(_type, _instanceId):
         result = s3List(boto_session, 2, _instanceId)
     elif _type == 'vpc':
         result = VPCList(boto_session, 2, _instanceId)
+    elif _type == 'subnet':
+        result = subnetList(boto_session, 2, _instanceId)
 
     
     return result # rendering 필요 
@@ -106,6 +116,10 @@ def stopInstance(_option, _type, _instanceId):
 
     return result
 
+# @app.route()
+# def addInstance():
+    
+#     return
 
 if __name__ == '__main__':
     app.run(port=3000, debug=True)

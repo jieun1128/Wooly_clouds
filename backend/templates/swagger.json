@@ -50,6 +50,27 @@
           }
         }
       },
+      "/logout":{
+        "get":{
+          "tags": [
+            {
+              "name": "Logout Test"
+            }
+          ],
+          "summary" : "Logout",
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            },
+            "400": {
+              "description": "Failed. Bad GET data."
+            }
+          }
+        }
+      },
       "/visualize": {
         "get": {
           "tags": [
@@ -143,7 +164,6 @@
           }
         }
       }
-
     },
 
     "components": {
