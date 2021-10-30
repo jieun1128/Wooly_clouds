@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="./assets/css/visual.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"/>
+
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3-org-chart@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3-flextree@2.0.0/build/d3-flextree.js"></script>
+
+    <title>Wooly Cloud</title>
+
+    <style>
+        .navbar { width: 100%; background-color: #7ADFFF; overflow: auto;}
+        .navbar a { float: left; padding: 12px; color: white; text-decoration: none; font-size: 17px;}
+        .navbar a:hover { background-color: #3bc4ee;}
+        .navbar a.active:hover { background-color: #3bc4ee;}
+        a.active { background-color: #fff; color: #000;}
+        .active i { background-color: #fff; color: #000;}
+
+        @media screen and (max-width: 500px) {
+            .navbar a {float: none; display: block;}
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <a class="" href="./new.html"><i class="fa fa-fw fa-home"></i></a> 
+        <a class="active" href="#">VPC</a>
+        <a href="#"> Subnet</a> 
+        <a class="inst" href="#">Instance</a>
+        <a href="#"> S3</a> 
+        <a href="#">IGW</a>
+        <a href="#">NAT_GW</a>
+    </div>
+
+    <div class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <div class="instance-info">
+            <h2>instanceA information</h2>
+            <p>instance id</p>
+            <p>i-0c7e2dbf9143e5ee0</p>
+            <br/>
+            <p>instance type</p>
+            <p>t2-micro</p>
+            <br/>
+            <p>public ip</p>
+            <p>34.64.105.182</p>
+            <br/>
+            <p>private ip</p>
+            <p>10.0.0195</p>
+            <br/>
+            <p>subnet id</p>
+            <p>subnet-06cf995b42d89862f<br/> (my_public_subnet)</p>
+            <br/>
+            <p>instance id</p>
+            <p>i-0c7e2dbf9143e5ee0</p>
+        </div>
+      </div>
+
+    <div id="main">
+        <div class="chart-container"></div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        var chart;
+        d3.csv(
+        //   'https://raw.githubusercontent.com/bumbeishvili/sample-data/main/org.csv'
+        './sample_data.csv'
+        ).then(dataFlattened => {
+          chart = new d3.OrgChart()
+            .container('.chart-container')
+            .data(dataFlattened)
+            .nodeHeight(d => 70)
+            .nodeWidth(d => {
+              if (d.depth == 0) return 350;
+              if (d.depth == 1) return 330;
+              return 310;
+            })
+            .childrenMargin(d => 50)
+            .compactMarginBetween(d => 35)
+            .compactMarginPair(d => 30)
+            .neightbourMargin((a, b) => 20)
+            .buttonContent(({ node, state }) => {
+              return `<div style="border-radius:3px;padding:3px;font-size:10px;margin:auto auto;background-color:lightgray"> <span style="font-size:9px">${
+                node.children
+                  ? `<i class="fas fa-chevron-up"></i>`
+                  : `<i class="fas fa-chevron-down"></i>`
+              }</span> ${node.data._directSubordinates}  </div>`;
+            })
+            .nodeContent(function(d, i, arr, state) {
+              const colors = ['#278B8D', '#404040', '#0C5C73', '#33C6CB'];
+              const color = d.data.instance_id == 'S3' ? '#c2c2c2' :colors[d.depth % colors.length];
+              return `
+              <div class="${d.data.positionName == 'Instance' ? 'instance' : ''}" style="background-color:${color}; position:absolute;margin-top:-1px; margin-left:-1px;width:${d.width}px;height:${d.height}px; border-radius: 5px;">
+                 <img src="
+                 ${d.data.imageUrl}
+                 " style="position:absolute;margin-top:5px;margin-left:${5}px;width:40px;height:40px; top:10px" />
+                 <div style="position:absolute;top:-15px;width:${
+                   d.width
+                 }px;text-align:center;color:#fafafa;">
+                       <div style="margin:0 auto;background-color:${color};display:inline-block;padding:8px;padding-bottom:0px;border-radius:5px"> ${d.data.id}</div>
+                </div>
+  
+                <div style="color:#fafafa;font-size:${
+                  d.depth < 2 ? 16 : 12
+                }px;font-weight:bold;margin-left:70px;margin-top:15px"> ${d.depth < 2 ? d.data.instance_id : (d.data.instance_id || '').trim().split(/\s+/g)[0]} </div>
+                <div style="color:#fafafa;margin-left:70px;margin-top:5px"> ${
+                  d.depth < 2 ? d.data.positionName : d.data.area
+                } </div>
+                
+                 <!--
+                 <div style="padding:20px; padding-top:35px;text-align:center">
+                    
+                     
+                 </div> 
+                
+                 <div style="display:flex;justify-content:space-between;padding-left:15px;padding-right:15px;">
+                   <div > Manages:  ${d.data._directSubordinates} 👤</div>  
+                   <div > Oversees: ${d.data._totalSubordinates} 👤</div>    
+                 </div>
+                 -->
+             </div>
+    `;
+            })
+            .render();
+        });
+      </script>
+
+      <script>
+          $('.inst').click(function(){
+            $('.sidenav').toggleClass('animate');
+            // $('#mySidenav').css('width', '250');
+            // $('#main').css('margin-right', "250px");
+          });
+
+          function closeNav() {
+            document.getElementById("mySidenav").style.width = "0";
+         }
+      </script>
+
+      
+
+    <!-- Visualization Section -->
+    <!-- <section class="canvas">
+        <div class="canvas-vpc">
+            <div class="icon-box">
+                <img src="./images/vpc.png" alt="">
+            </div>
+            <div class="subnet-box">
+                <div>
+                    <h3 class="subnet-title">Subnet Private A</h3>
+                    <div class="canvas-subnet private">
+                        <a href="" >
+                            <div class="canvas-instance"></div>
+                        </a>
+                        <a href="" >
+                            <div class="canvas-instance"></div>
+                        </a>
+                        <a href="" >
+                            <div class="canvas-instance"></div>
+                        </a>
+                        <a href="">
+                            <div class="canvas-instance"></div>
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="subnet-title">Subnet Public B</h3>
+                    <div class="canvas-subnet public">
+                        <a href="" >
+                            <div class="canvas-instance"></div>
+                        </a>
+                        <a href="" >
+                            <div class="canvas-instance"></div>
+                        </a>
+                        <a href="" >
+                            <div class="canvas-instance"></div>
+                        </a>
+                        <a href="" >
+                            <div class="canvas-instance"></div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section> -->
+
+    <!-- <script>
+        $('.subnet-title').click(function() {
+            $('.subnet-box').toggleClass('animate');
+            $('.canvas-vpc').toggleClass('animate');
+            $('.icon-box').toggleClass('animate');
+        });
+
+    </script> -->
+</body>
+</html>

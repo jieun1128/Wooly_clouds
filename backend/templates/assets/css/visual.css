@@ -1,0 +1,164 @@
+html, 
+body { 
+    margin: 0; 
+    padding: 0;
+}
+
+.canvas { 
+    width: 100%; 
+    height: 800px; 
+    position: relative;
+}
+.canvas .canvas-vpc {
+    width: 80%;
+    height: 60%;
+    border: 7px solid #8F00FF;
+    padding: 2rem;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    box-shadow: 4px 4px 12px #000;
+}
+.canvas .canvas-vpc.animate {
+    border: 7px solid rgba(143, 0, 255, 0.1);
+}
+.canvas .subnet-box {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+.canvas .canvas-vpc .icon-box {
+    position: absolute; 
+    top: -80px; 
+    left: 0;
+}
+.canvas .canvas-vpc .icon-box img { 
+    width: 80px;
+}
+.canvas .canvas-vpc .icon-box.animate { 
+    opacity: 0.1;
+}
+.canvas .subnet-box .subnet-title {
+    margin-bottom: 0;
+    cursor: pointer;
+}
+.canvas .subnet-box .subnet-title.hover {
+    color: lightseagreen;
+}
+.canvas .canvas-subnet {
+    display: inline-block;
+    border: 7px solid #339E00;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    align-items: center;
+    justify-items: center;
+}
+.canvas .subnet-box{
+    transform: scale(1);
+    transition: all 1s;
+    -webkit-transition: all 1s;
+    -moz-transition: all 1s;
+    -ms-transition: all 1s;
+    -o-transition: all 1s;
+    -webkit-transform: scale(1);
+    -moz-transform: scale(1);
+    -ms-transform: scale(1);
+    -o-transform: scale(1);
+}
+.canvas .subnet-box.animate {
+    transform: scale(1.6);
+    -webkit-transform: scale(1.6);
+    -moz-transform: scale(1.6);
+    -ms-transform: scale(1.6);
+    -o-transform: scale(1.6);
+}
+.canvas .canvas-subnet.public {
+    border: 7px solid #429aff;
+}
+.canvas .canvas-instance {
+    background-color: #FFA621;
+    border: 7px solid #FFA621;
+    width: 80px;
+    height: 80px;
+    margin: 10px;
+    box-shadow: 4px 4px 18px #000;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+}
+
+
+/*** 
+* sidenav 
+***/
+
+.sidenav {
+    width: 0;
+}
+.sidenav.animate {
+    width: 250px;
+}
+
+.sidenav {
+    height: 100%;
+    width: 0; 
+    position: fixed; 
+    z-index: 1;
+    top: 0; 
+    right: 0;
+    background-color: rgb(255, 255, 255); 
+    overflow-x: hidden; 
+    padding-top: 60px;
+    transition: 0.5s;
+}
+  
+  /* The navigation menu links */
+  .sidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+  }
+  
+  /* When you mouse over the navigation links, change their color */
+  .sidenav a:hover {
+    color: #f1f1f1;
+  }
+  
+  /* Position and style the close button (top right corner) */
+  .sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+  }
+
+  .instance-info {
+    margin-left: 30px;
+  }
+  
+  /* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+  #main {
+    transition: margin-right .5s;
+    padding: 20px;
+    -webkit-transition: margin-right .5s;
+    -moz-transition: margin-right .5s;
+    -ms-transition: margin-right .5s;
+    -o-transition: margin-right .5s;
+}
+  
+  /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+  @media screen and (max-height: 450px) {
+    .sidenav {padding-top: 15px;}
+    .sidenav a {font-size: 18px;}
+  }
