@@ -14,19 +14,6 @@
     <script src="https://cdn.jsdelivr.net/npm/d3-flextree@2.0.0/build/d3-flextree.js"></script>
 
     <title>Wooly Cloud</title>
-
-    <style>
-        .navbar { width: 100%; background-color: #7ADFFF; overflow: auto;}
-        .navbar a { float: left; padding: 12px; color: white; text-decoration: none; font-size: 17px;}
-        .navbar a:hover { background-color: #3bc4ee;}
-        .navbar a.active:hover { background-color: #3bc4ee;}
-        a.active { background-color: #fff; color: #000;}
-        .active i { background-color: #fff; color: #000;}
-
-        @media screen and (max-width: 500px) {
-            .navbar a {float: none; display: block;}
-        }
-    </style>
 </head>
 <body>
     <div class="navbar">
@@ -41,7 +28,7 @@
     </div>
 
     <div class="sidenav">
-        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="javascript:void(0)" class="closebtn">&times;</a>
         <div class="instance-info">
             <h2>instanceA information</h2>
             <p class="instance-info-label">instance id</p>
@@ -67,6 +54,32 @@
     <div id="main">
         <div class="chart-container"></div>
     </div>
+    
+    <div class="btns-control">
+        <!-- <button onclick="chart.exportImg()" class="btn btn-action-button waves-effect waves-light">
+            <i class="far fa-images"></i> 
+            export img
+        </button> -->
+        <button onclick="chart.zoomOut()" class="btn btn-action-button waves-effect waves-light"><i
+            class="fas fa-minus"></i> 
+            zoom out
+        </button>
+        <button onclick="chart.zoomIn()" class="btn btn-action-button waves-effect waves-light">
+            <i class="fas fa-plus"></i> 
+            zoom in
+        </button><button onclick='chart.setUpToTheRootHighlighted("O-6162").render().fit()' class="btn btn-action-button waves-effect waves-light">
+            <i class="fas fa-route"></i> 
+            view all
+        </button>
+        <button onclick="chart.expandAll()" class="btn btn-action-button waves-effect waves-light">
+            <i class="fas fa-angle-double-down"></i> 
+            expand all
+        </button>
+        <button onclick="chart.collapseAll()" class="btn btn-action-button waves-effect waves-light">
+            <i class="fas fa-angle-double-up"></i> 
+            collapse all
+        </button>
+    </div>
 
     <a href="./addInstance.html" class="btn-add">Add Instance →</a>
 
@@ -76,7 +89,6 @@
     <script>
         var chart;
         d3.csv(
-        //   'https://raw.githubusercontent.com/bumbeishvili/sample-data/main/org.csv'
         './sample_data.csv'
         ).then(dataFlattened => {
           chart = new d3.OrgChart()
@@ -103,16 +115,16 @@
               const colors = ['#278B8D', '#404040', '#0C5C73', '#33C6CB'];
               const color = d.data.instance_id == 'S3' ? '#c2c2c2' :colors[d.depth % colors.length];
               return `
-              <div class="${d.data.positionName == 'Instance' ? 'instance' : ''}" style="background-color:${color}; position:absolute;margin-top:-1px; margin-left:-1px;width:${d.width}px;height:${d.height}px; border-radius: 5px;">
-                 <img src="
-                 ${d.data.imageUrl}
-                 " style="position:absolute;margin-top:5px;margin-left:${5}px;width:40px;height:40px; top:10px" />
+              <div ${d.data.positionName == 'Instance' ? 'class="instance" onclick="showInfo()"' : ''}
+                style="background-color:${color}; position:absolute;margin-top:-1px; margin-left:-1px;width:${d.width}px;height:${d.height}px; border-radius: 5px;">
+                    <img src="
+                    ${d.data.imageUrl}
+                    " style="position:absolute;margin-top:5px;margin-left:${5}px;width:40px;height:40px; top:10px" />
                  <div style="position:absolute;top:-15px;width:${
                    d.width
                  }px;text-align:center;color:#fafafa;">
                        <div style="margin:0 auto;background-color:${color};display:inline-block;padding:8px;padding-bottom:0px;border-radius:5px"> ${d.data.id}</div>
                 </div>
-  
                 <div style="color:#fafafa;font-size:${
                   d.depth < 2 ? 16 : 12
                 }px;font-weight:bold;margin-left:70px;margin-top:15px"> ${d.depth < 2 ? d.data.instance_id : (d.data.instance_id || '').trim().split(/\s+/g)[0]} </div>
@@ -127,27 +139,36 @@
                  </div> 
                 
                  <div style="display:flex;justify-content:space-between;padding-left:15px;padding-right:15px;">
-                   <div > Manages:  ${d.data._directSubordinates} 👤</div>  
-                   <div > Oversees: ${d.data._totalSubordinates} 👤</div>    
+                   <div > Manages:  ${d.data._directSubordinates} 👤</div>
+                   <div > Oversees: ${d.data._totalSubordinates} 👤</div>   
                  </div>
                  -->
              </div>
-    `;
+            `;
             })
             .render();
         });
+
+        function showAll() {
+            chart.setUpToTheRootHighlighted("O-6162").render().fit()
+        }
+        function showInfo() {
+            $('.sidenav').toggleClass('animate');
+        }
       </script>
 
       <script>
           $('.inst').click(function(){
             $('.sidenav').toggleClass('animate');
-            // $('#mySidenav').css('width', '250');
-            // $('#main').css('margin-right', "250px");
           });
 
-          function closeNav() {
-            document.getElementById("mySidenav").style.width = "0";
-         }
+         $('.closebtn').click(function() {
+            $(".sidenav").removeClass('animate');
+        });
+
+        function openSideNav() {
+            document.getElementsByClassName('sidenav').width = '350px';
+        }
       </script>
 </body>
 </html>

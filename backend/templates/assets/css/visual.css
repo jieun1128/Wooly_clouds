@@ -96,6 +96,16 @@ body {
     -o-border-radius: 10px;
 }
 
+.navbar { width: 100%; background-color: #7ADFFF; overflow: auto;}
+.navbar a { float: left; padding: 12px; color: white; text-decoration: none; font-size: 17px;}
+.navbar a:hover { background-color: #3bc4ee;}
+.navbar a.active:hover { background-color: #3bc4ee;}
+a.active { background-color: #fff; color: #000;}
+.active i { background-color: #fff; color: #000;}
+
+@media screen and (max-width: 500px) {
+    .navbar a {float: none; display: block;}
+}
 .navbar .signIn {
     float: right;
     margin-right: 50px;
@@ -160,7 +170,7 @@ body {
   .instance-info {
     margin-left: 30px;
   }
-  
+
   /* Style page content - use this if you want to push the page content to the right when you open the side navigation */
   #main {
     transition: margin-right .5s;
@@ -181,8 +191,8 @@ body {
 .btn-add {
     padding: 10px 1.3rem;
     position: fixed;
-    top: 100px;
-    right: 80px;
+    top: 80px;
+    right: 60px;
     background: #3A4EFF;
     color: #fff;
     text-decoration: none;
@@ -194,4 +204,29 @@ body {
 }
 .btn-add:hover {
     background: #5061ff;
+}
+
+/* control button */
+.btns-control {
+    position: fixed;
+    top: 80px;
+    left: 60px;
+}
+.btns-control button {
+    display: block;
+    margin-bottom: 6px;
+    border: none;
+    background: #429aff;
+    color: #fff;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 15px;
+    -webkit-border-radius: 15px;
+    -moz-border-radius: 15px;
+    -ms-border-radius: 15px;
+    -o-border-radius: 15px;
+}
+.btns-control button:hover {
+    background: #1683ff;
+    box-shadow: 2px 2px 4px #97c8ff;
 }
