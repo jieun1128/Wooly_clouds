@@ -37,28 +37,29 @@
         <a href="#"> S3</a> 
         <a href="#">IGW</a>
         <a href="#">NAT_GW</a>
+        <a href="./login.html" class="signIn">Login</a>
     </div>
 
     <div class="sidenav">
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
         <div class="instance-info">
             <h2>instanceA information</h2>
-            <p>instance id</p>
+            <p class="instance-info-label">instance id</p>
             <p>i-0c7e2dbf9143e5ee0</p>
             <br/>
-            <p>instance type</p>
+            <p class="instance-info-label">instance type</p>
             <p>t2-micro</p>
             <br/>
-            <p>public ip</p>
+            <p class="instance-info-label">public ip</p>
             <p>34.64.105.182</p>
             <br/>
-            <p>private ip</p>
+            <p class="instance-info-label">private ip</p>
             <p>10.0.0195</p>
             <br/>
-            <p>subnet id</p>
+            <p class="instance-info-label">subnet id</p>
             <p>subnet-06cf995b42d89862f<br/> (my_public_subnet)</p>
             <br/>
-            <p>instance id</p>
+            <p class="instance-info-label">instance id</p>
             <p>i-0c7e2dbf9143e5ee0</p>
         </div>
       </div>
@@ -67,6 +68,10 @@
         <div class="chart-container"></div>
     </div>
 
+    <a href="./addInstance.html" class="btn-add">Add Instance →</a>
+
+    
+    <!-- JS -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
         var chart;
@@ -144,61 +149,5 @@
             document.getElementById("mySidenav").style.width = "0";
          }
       </script>
-
-      
-
-    <!-- Visualization Section -->
-    <!-- <section class="canvas">
-        <div class="canvas-vpc">
-            <div class="icon-box">
-                <img src="./images/vpc.png" alt="">
-            </div>
-            <div class="subnet-box">
-                <div>
-                    <h3 class="subnet-title">Subnet Private A</h3>
-                    <div class="canvas-subnet private">
-                        <a href="" >
-                            <div class="canvas-instance"></div>
-                        </a>
-                        <a href="" >
-                            <div class="canvas-instance"></div>
-                        </a>
-                        <a href="" >
-                            <div class="canvas-instance"></div>
-                        </a>
-                        <a href="">
-                            <div class="canvas-instance"></div>
-                        </a>
-                    </div>
-                </div>
-                <div>
-                    <h3 class="subnet-title">Subnet Public B</h3>
-                    <div class="canvas-subnet public">
-                        <a href="" >
-                            <div class="canvas-instance"></div>
-                        </a>
-                        <a href="" >
-                            <div class="canvas-instance"></div>
-                        </a>
-                        <a href="" >
-                            <div class="canvas-instance"></div>
-                        </a>
-                        <a href="" >
-                            <div class="canvas-instance"></div>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section> -->
-
-    <!-- <script>
-        $('.subnet-title').click(function() {
-            $('.subnet-box').toggleClass('animate');
-            $('.canvas-vpc').toggleClass('animate');
-            $('.icon-box').toggleClass('animate');
-        });
-
-    </script> -->
 </body>
 </html>

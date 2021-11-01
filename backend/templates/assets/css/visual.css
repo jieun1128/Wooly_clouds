@@ -2,6 +2,7 @@ html,
 body { 
     margin: 0; 
     padding: 0;
+    height: 100%;
 }
 
 .canvas { 
@@ -95,6 +96,10 @@ body {
     -o-border-radius: 10px;
 }
 
+.navbar .signIn {
+    float: right;
+    margin-right: 50px;
+}
 
 /*** 
 * sidenav 
@@ -104,7 +109,7 @@ body {
     width: 0;
 }
 .sidenav.animate {
-    width: 250px;
+    width: 350px;
 }
 
 .sidenav {
@@ -118,6 +123,7 @@ body {
     overflow-x: hidden; 
     padding-top: 60px;
     transition: 0.5s;
+    box-shadow: -4px 0 12px #8d8d8d;
 }
   
   /* The navigation menu links */
@@ -128,6 +134,14 @@ body {
     color: #818181;
     display: block;
     transition: 0.3s;
+  }
+
+  .sidenav p {
+    margin: 0;
+  }
+  .sidenav p.instance-info-label {
+      color: #9d9d9d;
+      /* font-weight: 600; */
   }
   
   /* When you mouse over the navigation links, change their color */
@@ -162,3 +176,22 @@ body {
     .sidenav {padding-top: 15px;}
     .sidenav a {font-size: 18px;}
   }
+
+/* add Instance button */
+.btn-add {
+    padding: 10px 1.3rem;
+    position: fixed;
+    top: 100px;
+    right: 80px;
+    background: #3A4EFF;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 30px;
+    -webkit-border-radius: 30px;
+    -moz-border-radius: 30px;
+    -ms-border-radius: 30px;
+    -o-border-radius: 30px;
+}
+.btn-add:hover {
+    background: #5061ff;
+}

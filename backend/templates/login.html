@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="./assets/css/visual.css">
+    <link rel="stylesheet" href="./assets/css/create.css">
+
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3-org-chart@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3-flextree@2.0.0/build/d3-flextree.js"></script>
+
+    <title>Wooly Cloud</title>
+
+    <style>
+        .navbar { width: 100%; background-color: #7ADFFF; overflow: auto;}
+        .navbar a { float: left; padding: 12px; color: white; text-decoration: none; font-size: 17px;}
+        .navbar a:hover { background-color: #3bc4ee;}
+        .navbar a.active:hover { background-color: #3bc4ee;}
+        a.active { background-color: #fff; color: #000;}
+        .active i { background-color: #fff; color: #000;}
+
+        @media screen and (max-width: 500px) {
+            .navbar a {float: none; display: block;}
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <a class="" href="./new.html"><i class="fa fa-fw fa-home"></i></a>
+        <a class="" href="./visual.html">Visualization</a>
+    </div>
+    <div class="contents">
+        <div class="flex-box">
+            <div class="img-box">
+                <img src="./images/login-img.png" alt="">
+            </div>
+            <div class="login-box">
+                <h1 class="title add-page">Login</h1>
+                <form action="">
+                    <label for="public-access-key">Public Access Key</label>
+                    <input type="text" id="public-access-key" placeholder=""/>
+                    <label for="secret-access-key">Secret Access Key</label>
+                    <input type="text" id="secret-access-key" placeholder=""/>
+                    <label for="region">Region</label>
+                    <select name="addInstance" id="region">
+                        <option value="Instance1">Instance1</option>
+                        <option value="Instance2">Instance2</option>
+                        <option value="Instance3">Instance3</option>
+                    </select>
+                    <button type="button" class="btn-submit" onclick="location.href='./visual.html'">Login</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,117 @@
+.contents {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.contents h1.title.add-page {
+    color: #0029FF;
+    margin: 10px;
+    font-size: 36px;
+}
+
+.contents h4 {
+    font-size: 24px;
+    margin: 0;
+    font-weight: 500;
+}
+
+.contents .login-box {
+    width: 20%;
+}
+
+.contents .login-box form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.contents .login-box select {
+    margin: 1rem auto;
+    width: 100%;
+    padding: 5px 1rem;
+    font-size: 1.3rem;
+    border: 1px solid #c2c2c2;
+    color: #575757;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+}
+
+.contents .login-box .btn-submit {
+    display: block;
+    border: 1px solid #c2c2c2;
+    margin: 10px auto;
+    padding: 5px 1rem;
+    width: 100%;
+    background: #fff;
+    color: #878787;
+    font-size: 1.3rem;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: all .5s;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+    -webkit-transition: all .5s;
+    -moz-transition: all .5s;
+    -ms-transition: all .5s;
+    -o-transition: all .5s;
+}
+
+.contents .login-box .btn-submit:hover {
+    color: #fff;
+    background: #0029FF;
+}
+
+/* login */
+.flex-box {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-items: center;
+    align-items: center;
+    width: 50%;
+    box-shadow: 4px 4px 12px #818181;
+}
+.flex-box .img-box {
+    width: 100%;
+    height: 100%;
+}
+.flex-box .img-box img{
+    width: 100%;
+    height: 100%;
+}
+.flex-box .login-box{
+    width: 80%;
+    padding: 20px;
+}
+
+.flex-box label {
+    margin: 10px 0 5px;
+    color: #888787;
+    text-align: left;
+}
+.flex-box .login-box input,
+.flex-box .login-box select {
+    padding: 5px 1rem;
+    font-size: 1rem;
+    border: 1px solid #878787;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+}
+.flex-box .login-box select {
+    margin-top: 0;
+}
+.flex-box .login-box .btn-submit {
+    background: #7ADFFF;
+    color: #fff;
+    font-weight: 600;
+}
