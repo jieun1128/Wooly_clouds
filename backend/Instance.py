@@ -155,7 +155,12 @@ def subnetList(boto_session, option, subnetID):
         return subnetInfo
     
 
+def IGWList(boto_session, option, igwID):
+    
+    return ''
 
+def NGWList(boto_session, opttion, ngwID):
 
+    return ''
 
 
