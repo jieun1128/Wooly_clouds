@@ -31,8 +31,8 @@
 </head>
 <body>
     <div class="navbar">
-        <a class="" href="./new.html"><i class="fa fa-fw fa-home"></i></a>
-        <a class="" href="./visual.html">Visualization</a>
+        <a class="" href=""><i class="fa fa-fw fa-home"></i></a>
+        <a class="" href="visualization">Visualization</a>
     </div>
     <div class="contents">
         <div class="flex-box">
@@ -41,18 +41,18 @@
             </div>
             <div class="login-box">
                 <h1 class="title add-page">Login</h1>
-                <form action="">
-                    <label for="public-access-key">Public Access Key</label>
-                    <input type="text" id="public-access-key" placeholder=""/>
-                    <label for="secret-access-key">Secret Access Key</label>
-                    <input type="text" id="secret-access-key" placeholder=""/>
+                <form action="login" method="POST">
+                    <label for="public">Public Access Key</label>
+                    <input type="text" name="public" placeholder=""/>
+                    <label for="secret">Secret Access Key</label>
+                    <input type="text" name="secret" placeholder=""/>
                     <label for="region">Region</label>
-                    <select name="addInstance" id="region">
-                        <option value="Instance1">Instance1</option>
-                        <option value="Instance2">Instance2</option>
-                        <option value="Instance3">Instance3</option>
+                    <select name="region">
+                        <option value="ap-northeast-1">ap-northeast-1</option>
+                        <option value="ap-northeast-2">ap-northeast-2</option>
+                        <option value="ap-northeast-3">ap-northeast-3</option>
                     </select>
-                    <button type="button" class="btn-submit" onclick="location.href='./visual.html'">Login</button>
+                    <button type="submit" class="btn-submit">Login</button>
                 </form>
             </div>
         </div>
