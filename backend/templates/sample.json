@@ -1,0 +1,47 @@
+{
+    "ec2": [
+      [
+        "i-0c7e2dbf9143e5ee0",
+        "subnet-06cf995b42d89862f",
+        "vpc-0090ae5d05005d897"
+      ],
+      [
+        "i-07477ebfbda452945",
+        "subnet-06cf995b42d89862f",
+        "vpc-0090ae5d05005d897"
+      ]
+    ],
+    "s3": [
+      "woolycloudbucket"
+    ],
+    "subnet": [
+      [
+        "subnet-06cf995b42d89862f",
+        "vpc-0090ae5d05005d897"
+      ],
+      [
+        "subnet-d17b3aaa",
+        "vpc-08eb7163"
+      ],
+      [
+        "subnet-0fee21e68c7e8f07e",
+        "vpc-0090ae5d05005d897"
+      ],
+      [
+        "subnet-f643d79d",
+        "vpc-08eb7163"
+      ],
+      [
+        "subnet-3b2cd474",
+        "vpc-08eb7163"
+      ],
+      [
+        "subnet-b48055eb",
+        "vpc-08eb7163"
+      ]
+    ],
+    "vpc": [
+      "vpc-0090ae5d05005d897",
+      "vpc-08eb7163"
+    ]
+  }

@@ -153,6 +153,33 @@ a.active { background-color: #fff; color: #000;}
       color: #9d9d9d;
       /* font-weight: 600; */
   }
+
+  .sidenav .btn-flex {
+    display: flex;
+  }
+  
+  .sidenav .control-instance {
+      margin: 1.5rem 5px;
+      border: 1px solid;
+      font-size: 1rem;
+      text-align: center;
+      padding: 5px;
+      width: 100%;
+      border-radius: 10px;
+      -webkit-border-radius: 10px;
+      -moz-border-radius: 10px;
+      -ms-border-radius: 10px;
+      -o-border-radius: 10px;
+      transition: all .5s;
+      -webkit-transition: all .5s;
+      -moz-transition: all .5s;
+      -ms-transition: all .5s;
+      -o-transition: all .5s;
+    }
+    .sidenav .control-instance:hover {
+        background: #ff584c;
+        font-weight: 600;
+    }
   
   /* When you mouse over the navigation links, change their color */
   .sidenav a:hover {
