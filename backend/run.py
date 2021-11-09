@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, session
+from flask import Flask, render_template, request, jsonify, session, url_for, redirect
 from flask_cors import CORS
 import boto3
 import botocore
@@ -42,38 +42,39 @@ def login():
             ec2_client.describe_instances()
             session['boto_session'] = [public_access, secret, region]
         except botocore.exceptions.ClientError:
-            return "key 입력을 다시 확인해 주세요"
+            return render_template('login.html',message = "key 입력을 다시 확인해 주세요")
 
-        return "login success"
+        return redirect(url_for('visualize'))
 
 @app.route('/logout', methods=['GET'])
 def logout():
     session.pop('boto_session', None)
     return render_template('new.html')
 
-
 @app.route('/visualize', methods=['GET'])
 def visualize():
     userInfo = session.get('boto_session',None)
-    boto_session = boto3.Session(
-        aws_access_key_id= userInfo[0],
-        aws_secret_access_key = userInfo[1],
-        region_name= userInfo[2]
-    )
+    if(userInfo == None):
+        return redirect(url_for('login'))
+    else:
+        boto_session = boto3.Session(
+            aws_access_key_id= userInfo[0],
+            aws_secret_access_key = userInfo[1],
+            region_name= userInfo[2]
+        )
 
-    subnet = subnetList(boto_session,1, '')
-    ec2 = ec2List(boto_session,1, '')
-    s3 = s3List(boto_session,1, '')
-    vpc = VPCList(boto_session, 1,'')
+        subnet = subnetList(boto_session,1, '')
+        ec2 = ec2List(boto_session,1, '')
+        s3 = s3List(boto_session,1, '')
+        vpc = VPCList(boto_session, 1,'')
 
-    instanceList = {
-        'ec2' : ec2,
-        's3' : s3,
-        'vpc' : vpc,
-        'subnet' : subnet
-    }
-
-    return instanceList # rendering 필요 
+        instanceList = {
+            'ec2' : ec2,
+            's3' : s3,
+            'vpc' : vpc,
+            'subnet' : subnet
+        }
+        return render_template('visual.html', instanceList = instanceList)
 
 
 @app.route('/information/<string:_type>/ID/<string:_instanceId>', methods=['GET'])
@@ -96,7 +97,7 @@ def information(_type, _instanceId):
         result = subnetList(boto_session, 2, _instanceId)
 
     
-    return result # rendering 필요 
+    return render_template('visual.html', result=result) # rendering 필요 
 
 @app.route('/option/<string:_option>/type/<string:_type>/ID/<string:_instanceId>', methods=['GET'])
 def stopInstance(_option, _type, _instanceId):
