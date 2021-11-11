@@ -1,5 +1,12 @@
-from boto3 import session
+from boto3 import NullHandler, session
 import botocore
+
+imageUrl = {
+    "VPC" : "https://firebasestorage.googleapis.com/v0/b/confident-35184.appspot.com/o/vpc.png?alt=media&token=746f89eb-c3b1-45c2-b7ab-b5195184ef12",
+    "SUBNET" : "https://firebasestorage.googleapis.com/v0/b/confident-35184.appspot.com/o/subnet.png?alt=media&token=74784509-f005-4fae-9771-efaf46822c73",
+    "S3" : "https://firebasestorage.googleapis.com/v0/b/confident-35184.appspot.com/o/S3.png?alt=media&token=86dba17a-85e6-446b-b1a5-9581847df29b",
+    "EC2" : "https://firebasestorage.googleapis.com/v0/b/confident-35184.appspot.com/o/instance.png?alt=media&token=e464b262-64b8-4388-b2c7-61822b3d1e64"
+}
 
 def ec2List(boto_session, option, instanceID):
     ec2_client = boto_session.client('ec2')
@@ -8,7 +15,12 @@ def ec2List(boto_session, option, instanceID):
         responses = ec2_client.describe_instances().get("Reservations")
         for response in responses :
             for instance in response["Instances"]:
-                ec2List.append([instance["InstanceId"],instance["SubnetId"],instance["VpcId"]])
+                information = {}
+                information["element"] = "instance"
+                information["imageUrl"] = imageUrl['EC2']
+                information["id"] = instance["InstanceId"]
+                information["parentId"] = instance["SubnetId"]
+                ec2List.append(information)
         return ec2List
     elif option == 2 : # 특정 ec2 인스턴스 정보 불러오기 
         try:
@@ -74,7 +86,12 @@ def s3List(boto_session, option, bucketName):
         bucketList = []
 
         for bucket in list_buckets_resp['Buckets']:
-            bucketList.append(bucket['Name'])
+            information = {}
+            information["element"] = "s3"
+            information["imageUrl"] = imageUrl["S3"]
+            information["id"] = bucket["Name"]
+
+            bucketList.append(information)
 
         return bucketList
     elif option == 2:               # 특정 s3 인스턴스 정보 불러오기 
@@ -108,7 +125,12 @@ def VPCList(boto_session, option, vpcID):
         responses = ec2_client.describe_vpcs().get("Vpcs")
         vpcList = []
         for response in responses :
-            vpcList.append(response['VpcId'])
+            information = {}
+            information["element"] = "VPC"
+            information["imageUrl"] = imageUrl["VPC"]
+            information["id"] = response['VpcId']
+            information["parentId"] = None
+            vpcList.append(information)
         return vpcList
     elif option == 2:                   # 특정 VPC 정보 불러오기 
         try :
@@ -134,7 +156,12 @@ def subnetList(boto_session, option, subnetID):
         responses = ec2_client.describe_subnets().get('Subnets')
         subnetList = []
         for response in responses :
-            subnetList.append([response['SubnetId'],response['VpcId']])
+            information = {}
+            information["element"] = "subnet"
+            information["imageUrl"] = imageUrl["SUBNET"]
+            information["id"] = response["SubnetId"]
+            information["parentId"] = response["VpcId"]
+            subnetList.append(information)
         return subnetList
     elif option == 2:
         try :
