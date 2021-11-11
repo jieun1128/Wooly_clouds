@@ -90,6 +90,7 @@ def s3List(boto_session, option, bucketName):
             information["element"] = "s3"
             information["imageUrl"] = imageUrl["S3"]
             information["id"] = bucket["Name"]
+            information["parentId"] = None
 
             bucketList.append(information)
 
@@ -183,11 +184,55 @@ def subnetList(boto_session, option, subnetID):
     
 
 def IGWList(boto_session, option, igwID):
-    
-    return ''
+    ec2_client = boto_session.client('ec2')
 
-def NGWList(boto_session, opttion, ngwID):
+    if option == 1 :       
+        responses = ec2_client.describe_IGWs().get('IGWs')
+        IGWList = []
+        for response in responses :
+            IGWList.append([response['IGWId']])
+        return IGWList
+    elif option == 2:
+        try :
+            IGWInfo = dict()
+            response = ec2_client.describe_IGWs(IGWIds=[igwID]).get("IGWs")[0]
+            IGWInfo['IGWId'] = response['IGWId']
+            IGWInfo['AvailabilityZone'] = response['AvailabilityZone']
+            IGWInfo['CidrBlock'] = response['CidrBlock']
+            IGWInfo['State'] = response['State']
+            IGWInfo['Name'] = response['Tags'][0]['Value']
 
-    return ''
+        except botocore.exceptions.ClientError as e:
+            if e.response['Error']['Code'] == "MissingParameter":
+                print("Error: Missing instance id!!")
+            else:
+                raise
+        return IGWInfo
+
+
+def NGWList(boto_session, option, ngwID):
+    ec2_client = boto_session.client('ec2') 
+    if option == 1 :       
+        responses = ec2_client.describe_nat_gateways().get('NGWs')
+        NGWList = []
+        for response in responses :
+            NGWList.append([response['NGWId']])
+        return NGWList
+    elif option == 2:
+        try :
+            NGWInfo = dict()
+            response = ec2_client.describe_IGWs(NGWIds=[ngwID]).get("NGWs")[0]
+            NGWInfo['NGWId'] = response['NGWId']
+            NGWInfo['AvailabilityZone'] = response['AvailabilityZone']
+            NGWInfo['CidrBlock'] = response['CidrBlock']
+            NGWInfo['State'] = response['State']
+            NGWInfo['Name'] = response['Tags'][0]['Value']
+
+        except botocore.exceptions.ClientError as e:
+            if e.response['Error']['Code'] == "MissingParameter":
+                print("Error: Missing instance id!!")
+            else:
+                raise
+        return NGWInfo
 
 
