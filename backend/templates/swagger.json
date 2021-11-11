@@ -125,7 +125,7 @@
         }
       },
 
-      "/option/{option}/type/{type}/ID/{ID}":{
+      "/option/{option}/type/{type}/instanceId/{instanceId}":{
         "get": {
           "tags": [
             {

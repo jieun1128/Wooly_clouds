@@ -63,20 +63,17 @@ def visualize():
             region_name= userInfo[2]
         )
 
-        subnet = subnetList(boto_session,1, '')
-        ec2 = ec2List(boto_session,1, '')
-        s3 = s3List(boto_session,1, '')
-        vpc = VPCList(boto_session, 1,'')
+        result = VPCList(boto_session, 1,'')
+        result.extend(subnetList(boto_session,1, ''))
+        result.extend(s3List(boto_session,1, ''))
+        result.extend(ec2List(boto_session,1, ''))
+
+        
+
         igw = IGWList(boto_session, 1, '')
         ngw = NGWList(boto_session, 1, '')
 
-        instanceList = {
-            'ec2' : ec2,
-            's3' : s3,
-            'vpc' : vpc,
-            'subnet' : subnet
-        }
-        return render_template('visual.html', instanceList = instanceList)
+        return render_template('visual.html', result = result)
 
 
 @app.route('/information/<string:_type>/ID/<string:_instanceId>', methods=['GET'])
@@ -99,9 +96,9 @@ def information(_type, _instanceId):
         result = subnetList(boto_session, 2, _instanceId)
 
     
-    return render_template('visual.html', result=result) # rendering 필요 
+    return render_template('visual.html', instanceInformation=result) # rendering 필요 
 
-@app.route('/option/<string:_option>/type/<string:_type>/ID/<string:_instanceId>', methods=['GET'])
+@app.route('/option/<string:_option>/type/<string:_type>/instanceId/<string:_instanceId>', methods=['GET'])
 def stopInstance(_option, _type, _instanceId):
     userInfo = session.get('boto_session',None)
     boto_session = boto3.Session(
