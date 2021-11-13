@@ -90,6 +90,51 @@
     
     <!-- JS -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="./test.json" type="text/javascript"></script>
+    <script type="text/javascript">
+      var request = new XMLHttpRequest();
+      request.open('GET', "./test.json");
+
+      request.responseType = 'json';
+      request.send();
+
+      request.onload = function() {
+        var jsonfile = request.response;
+        console.log(jsonfile);
+        convertJSON(jsonfile);
+      }
+
+      var temp = '';
+      var xhr= new XMLHttpRequest();
+      // var paramVal= "paramVal";
+      var target= "URL";
+      xhr.open("GET", "./test.json");
+      xhr.send();
+
+      xhr.onreadystatechange= function(){
+        if(xhr.readyState=== XMLHttpRequest.DONE){
+          if(xhr.status== 200){
+            var loadedJSON= JSON.parse(xhr.responseText);
+            return loadedJSON;
+          }
+        }
+      }
+      temp = xhr.onreadystatechange;
+      console.log(temp);
+
+      function convertJSON(jsonfile) {
+        const items = jsonfile
+        const replacer = (key, value) => value === null ? '' : value // specify how you want to handle null values here
+        const header = Object.keys(items[0])
+        let csv = items.map(row => header.map(fieldName => JSON.stringify(row[fieldName], replacer)).join(','))
+        csv.unshift(header.join(','))
+        csv = csv.join('\r\n')
+
+        console.log(csv);
+        return csv
+      }
+      
+    </script>
     <script>
         var chart;
         d3.csv(
@@ -174,5 +219,7 @@
             document.getElementsByClassName('sidenav').width = '350px';
         }
       </script>
+
+      <script src="./assets/js/convert.js"></script>
 </body>
 </html>
