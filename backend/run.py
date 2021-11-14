@@ -3,7 +3,9 @@ from flask_cors import CORS
 import boto3
 import botocore
 from flask_swagger_ui import get_swaggerui_blueprint
-from Instance import ec2List, s3List, VPCList, subnetList, IGWList, NGWList
+from Instance import ec2List, s3List, VPCList, subnetList, IGWList, NGWList, getRootInfo
+import pandas as pd
+import json
 
 app = Flask(__name__,static_url_path='',static_folder="templates") 
 app.config['SECRET_KEY'] = 'wcsfeufhwiquehfdx'
@@ -62,16 +64,24 @@ def visualize():
             aws_secret_access_key = userInfo[1],
             region_name= userInfo[2]
         )
+        result = []
+        temp = []
+        temp.append(getRootInfo(userInfo))
+        temp.append(VPCList(boto_session, userInfo, 1,''))
+        temp.append(subnetList(boto_session,1, ''))
+        temp.append(s3List(boto_session,1, ''))
+        temp.append(ec2List(boto_session,1, ''))
 
-        result = VPCList(boto_session, 1,'')
-        result.extend(subnetList(boto_session,1, ''))
-        result.extend(s3List(boto_session,1, ''))
-        result.extend(ec2List(boto_session,1, ''))
-
+        for i in temp:
+            if i is not None :
+                result.extend(i)
         
+        #result.extend(IGWList(boto_session, 1, ''))
+        #result.extend(NGWList(boto_session, 1, ''))
 
-        igw = IGWList(boto_session, 1, '')
-        ngw = NGWList(boto_session, 1, '')
+        df = pd.json_normalize(result)
+        df = df.set_index('element')
+        df.to_csv("./templates/data.csv")
 
         return render_template('visual.html', result = result)
 
@@ -95,7 +105,6 @@ def information(_type, _instanceId):
     elif _type == 'subnet':
         result = subnetList(boto_session, 2, _instanceId)
 
-    
     return render_template('visual.html', instanceInformation=result) # rendering 필요 
 
 @app.route('/option/<string:_option>/type/<string:_type>/instanceId/<string:_instanceId>', methods=['GET'])
