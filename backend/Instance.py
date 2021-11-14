@@ -8,6 +8,15 @@ imageUrl = {
     "EC2" : "https://firebasestorage.googleapis.com/v0/b/confident-35184.appspot.com/o/instance.png?alt=media&token=e464b262-64b8-4388-b2c7-61822b3d1e64"
 }
 
+def getRootInfo(session):
+    information = {}
+    information["element"] = session[2]
+    information["imageUrl"] = imageUrl['VPC']
+    information["id"] = session[2]
+    information["parentId"] = None
+    return [information]
+
+
 def ec2List(boto_session, option, instanceID):
     ec2_client = boto_session.client('ec2')
     if option == 1: # 모든 ec2 인스턴스 정보 불러오기 
@@ -20,6 +29,7 @@ def ec2List(boto_session, option, instanceID):
                 information["imageUrl"] = imageUrl['EC2']
                 information["id"] = instance["InstanceId"]
                 information["parentId"] = instance["SubnetId"]
+                information["name"] = instance["Tags"][0]["Value"]
                 ec2List.append(information)
         return ec2List
     elif option == 2 : # 특정 ec2 인스턴스 정보 불러오기 
@@ -91,7 +101,7 @@ def s3List(boto_session, option, bucketName):
             information["imageUrl"] = imageUrl["S3"]
             information["id"] = bucket["Name"]
             information["parentId"] = None
-
+            information["name"] = None
             bucketList.append(information)
 
         return bucketList
@@ -119,7 +129,7 @@ def s3List(boto_session, option, bucketName):
         return "삭제 완료"
 
 
-def VPCList(boto_session, option, vpcID):
+def VPCList(boto_session, session, option, vpcID):
     ec2_client = boto_session.client('ec2')
 
     if option == 1 :       # 모든 VPC List 불러오기 
@@ -129,8 +139,9 @@ def VPCList(boto_session, option, vpcID):
             information = {}
             information["element"] = "VPC"
             information["imageUrl"] = imageUrl["VPC"]
-            information["id"] = response['VpcId']
-            information["parentId"] = None
+            information["id"] = response["VpcId"]
+            information["parentId"] = session[2]
+            information["name"] = response["Tags"][0]["Value"]
             vpcList.append(information)
         return vpcList
     elif option == 2:                   # 특정 VPC 정보 불러오기 
@@ -162,6 +173,7 @@ def subnetList(boto_session, option, subnetID):
             information["imageUrl"] = imageUrl["SUBNET"]
             information["id"] = response["SubnetId"]
             information["parentId"] = response["VpcId"]
+            information["name"] = response["Tags"][0]["Value"]
             subnetList.append(information)
         return subnetList
     elif option == 2:
