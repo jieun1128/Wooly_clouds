@@ -30,9 +30,14 @@ def ec2List(boto_session, option, instanceID):
                 information["element"] = "instance"
                 information["imageUrl"] = imageUrl['EC2']
                 information["id"] = instance["InstanceId"]
-                information["parentId"] = instance["SubnetId"]
+                # information["parentId"] = instance["SubnetId"]
+                try: 
+                    information["parentId"] = instance["SubnetId"]
+                except:
+                    information["parentId"] = "ap-northeast-2"
                 information["name"] = instance["Tags"][0]["Value"]
                 ec2List.append(information)
+        print(ec2List)
         return ec2List
     elif option == 2 : # 특정 ec2 인스턴스 정보 불러오기 
         try:

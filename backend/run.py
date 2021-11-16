@@ -103,7 +103,7 @@ def information(_type, _instanceId):
     elif _type == "vpc" :
         result = VPCList(boto_session, userInfo, 2, _instanceId)
     elif _type == "subnet" :
-        result = subnetList(boto_session, 2, _instanceId)
+        result = subnetList(boto_session, 2, _instanceId
 
     return result
 
