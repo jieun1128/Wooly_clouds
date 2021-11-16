@@ -69,7 +69,7 @@ def visualize():
         temp.append(getRootInfo(userInfo))
         temp.append(VPCList(boto_session, userInfo, 1,''))
         temp.append(subnetList(boto_session,1, ''))
-        temp.append(s3List(boto_session,1, ''))
+        temp.append(s3List(boto_session, userInfo, 1, ''))
         temp.append(ec2List(boto_session,1, ''))
 
         for i in temp:
@@ -99,9 +99,9 @@ def information(_type, _instanceId):
     if _type == 'ec2' :
         result = ec2List(boto_session, 2, _instanceId)
     elif _type == 's3':
-        result = s3List(boto_session, 2, _instanceId)
+        result = s3List(boto_session, userInfo, 2, _instanceId)
     elif _type == 'vpc':
-        result = VPCList(boto_session, 2, _instanceId)
+        result = VPCList(boto_session, userInfo, 2, _instanceId)
     elif _type == 'subnet':
         result = subnetList(boto_session, 2, _instanceId)
 
@@ -125,10 +125,28 @@ def stopInstance(_option, _type, _instanceId):
 
     return result
 
-# @app.route()
-# def addInstance():
-    
-#     return
+@app.route('/add', methods=['POST'])
+def addInstance():
+    userInfo = session.get('boto_session',None)
+    boto_session = boto3.Session(
+        aws_access_key_id= userInfo[0],
+        aws_secret_access_key = userInfo[1],
+        region_name= userInfo[2]
+    )
+
+    if request['type'] == "ec2":
+        print("ec2")
+    elif request['type'] == "s3":
+        print("s3")
+    elif request['type'] == "vpc":
+        print("vpc")
+    elif request['type'] == "subnet":
+        print("subnet")
+    elif request['type'] == "igw":
+        print("igw")
+    else:
+        print("ngw")
+    return ""
 
 if __name__ == '__main__':
     app.run(port=3000, debug=True)

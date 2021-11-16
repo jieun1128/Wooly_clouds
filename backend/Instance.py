@@ -87,7 +87,7 @@ def ec2List(boto_session, option, instanceID):
         
 
 
-def s3List(boto_session, option, bucketName):
+def s3List(boto_session, session, option, bucketName):
     s3_client = boto_session.client('s3')
 
 
@@ -100,7 +100,7 @@ def s3List(boto_session, option, bucketName):
             information["element"] = "s3"
             information["imageUrl"] = imageUrl["S3"]
             information["id"] = bucket["Name"]
-            information["parentId"] = None
+            information["parentId"] = session[2]
             information["name"] = None
             bucketList.append(information)
 
