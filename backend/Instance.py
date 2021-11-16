@@ -24,6 +24,8 @@ def ec2List(boto_session, option, instanceID):
         responses = ec2_client.describe_instances().get("Reservations")
         for response in responses :
             for instance in response["Instances"]:
+                if instance['State']['Name'] == 'terminated':
+                    continue
                 information = {}
                 information["element"] = "instance"
                 information["imageUrl"] = imageUrl['EC2']
@@ -157,7 +159,6 @@ def VPCList(boto_session, session, option, vpcID):
             vpcInfo['CidrBlock'] = response['CidrBlock']
             vpcInfo['State'] = response['State']
             vpcInfo['Name'] = response['Tags'][0]['Value']
-            vpcInfo['AvailabilityZone'] = response['AvailabilityZone']
 
         except botocore.exceptions.ClientError as e:
             if e.response['Error']['Code'] == "MissingParameter":
