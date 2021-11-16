@@ -1,139 +1,150 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="./assets/css/visual.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="./assets/css/visual.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
 
-    <script src="https://d3js.org/d3.v7.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/d3-org-chart@2"></script>
-    <script src="https://cdn.jsdelivr.net/npm/d3-flextree@2.0.0/build/d3-flextree.js"></script>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/d3-org-chart@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/d3-flextree@2.0.0/build/d3-flextree.js"></script>
 
-    <title>Wooly Cloud</title>
+  <title>Wooly Cloud</title>
 </head>
+
 <body>
-    <div class="navbar">
-        <a class="" href="./new.html"><i class="fa fa-fw fa-home"></i></a> 
-        <a class="active" href="#">VPC</a>
-        <a href="#"> Subnet</a> 
-        <a class="inst" href="#">Instance</a>
-        <a href="#"> S3</a> 
-        <a href="#">IGW</a>
-        <a href="#">NAT_GW</a>
-        <a href="./login.html" class="signIn">Login</a>
+  <div class="navbar">
+    <a class="" href="./new.html"><i class="fa fa-fw fa-home"></i></a>
+    <a class="highlight btn-vpc active" href="#">VPC</a>
+    <a class="highlight btn-sub" href="#"> Subnet</a>
+    <a class="highlight btn-inst" href="#">Instance</a>
+    <a class="highlight btn-s3" href="#"> S3</a>
+    <a class="highlight">IGW</a>
+    <a class="highlight">NAT_GW</a>
+    <a class="./login.html" class="signIn">Logout</a>
+  </div>
+
+  <div class="sidenav">
+    <a href="javascript:void(0)" class="closebtn">&times;</a>
+    <div class="instance-info">
+      <h2 id="Name"></h2>
+      <p class="instance-info-label">instance id</p>
+      <p class="instance-id"></p>
+      <br />
+      <p class="instance-info-label">instance type</p>
+      <p id="InstanceType"></p>
+      <br />
+      <p class="instance-info-label">public ip</p>
+      <p id="PublicIpAddress"></p>
+      <br />
+      <p class="instance-info-label">private ip</p>
+      <p id="PrivateIpAddress"></p>
+      <br />
+      <p class="instance-info-label">subnet id</p>
+      <p id="Subnet_Id"></p>
+      <br />
+      <p class="instance-info-label">instance id</p>
+      <p id="InstanceId"></p>
+      <br />
+      <p class="instance-info-label">State</p>
+      <p id="State"></p>
     </div>
-
-    <div class="sidenav">
-        <a href="javascript:void(0)" class="closebtn">&times;</a>
-        <div class="instance-info">
-            <h2>instanceA information</h2>
-            <p class="instance-info-label">instance id</p>
-            <p>i-0c7e2dbf9143e5ee0</p>
-            <br/>
-            <p class="instance-info-label">instance type</p>
-            <p>t2-micro</p>
-            <br/>
-            <p class="instance-info-label">public ip</p>
-            <p>34.64.105.182</p>
-            <br/>
-            <p class="instance-info-label">private ip</p>
-            <p>10.0.0195</p>
-            <br/>
-            <p class="instance-info-label">subnet id</p>
-            <p>subnet-06cf995b42d89862f<br/> (my_public_subnet)</p>
-            <br/>
-            <p class="instance-info-label">instance id</p>
-            <p>i-0c7e2dbf9143e5ee0</p>
-        </div>
-        <div class='btn-flex'>
-            <a href="#" class="control-instance">종료</a>
-            <a href="#" class="control-instance">삭제</a>
-        </div>
-      </div>
-
-    <div id="main">
-        <div class="chart-container"></div>
+    <div class='btn-flex'>
+      <a href="#" class="control-instance" id="off">종료</a>
+      <a href="#" class="control-instance" id="delete">삭제</a>
     </div>
-    
-    <div class="btns-control">
-        <!-- <button onclick="chart.exportImg()" class="btn btn-action-button waves-effect waves-light">
-            <i class="far fa-images"></i> 
-            export img
-        </button> -->
-        <button onclick="chart.zoomOut()" class="btn btn-action-button waves-effect waves-light"><i
-            class="fas fa-minus"></i> 
-            zoom out
-        </button>
-        <button onclick="chart.zoomIn()" class="btn btn-action-button waves-effect waves-light">
-            <i class="fas fa-plus"></i> 
-            zoom in
-        </button><button onclick='chart.setUpToTheRootHighlighted("O-6162").render().fit()' class="btn btn-action-button waves-effect waves-light">
-            <i class="fas fa-route"></i> 
-            view all
-        </button>
-        <button onclick="chart.expandAll()" class="btn btn-action-button waves-effect waves-light">
-            <i class="fas fa-angle-double-down"></i> 
-            expand all
-        </button>
-        <button onclick="chart.collapseAll()" class="btn btn-action-button waves-effect waves-light">
-            <i class="fas fa-angle-double-up"></i> 
-            collapse all
-        </button>
+  </div>
+
+  <div id="main">
+    <div class="chart-container"></div>
+  </div>
+
+  <div class="btns-control">
+    <button onclick='chart.setUpToTheRootHighlighted("O-6162").render().fit()'
+      class="btn btn-action-button waves-effect waves-light">
+      <i class="fas fa-route"></i>
+      view all
+    </button>
+    <button onclick="openAll()" class="btn btn-action-button waves-effect waves-light">
+      <i class="fas fa-angle-double-down"></i>
+      expand all
+    </button>
+    <button onclick="closeAll()" class="btn btn-action-button waves-effect waves-light">
+      <i class="fas fa-angle-double-up"></i>
+      collapse all
+    </button>
+  </div>
+
+  <a href="./addInstance.html" class="btn-add">Add Instance →</a>
+
+  <div class="s3-box">
+    <div class="s3-img">
+      <img src="https://firebasestorage.googleapis.com/v0/b/confident-35184.appspot.com/o/S3.png?alt=media&token=86dba17a-85e6-446b-b1a5-9581847df29b" alt="s3 이미지">
     </div>
+    <div id="s3-info">
 
-    <a href="./addInstance.html" class="btn-add">Add Instance →</a>
+    </div>
+  </div>
 
-    
-    <!-- JS -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script>
-        var chart;
-        d3.csv(
-        './sample_data.csv'
-        ).then(dataFlattened => {
-          chart = new d3.OrgChart()
-            .container('.chart-container')
-            .data(dataFlattened)
-            .nodeHeight(d => 70)
-            .nodeWidth(d => {
-              if (d.depth == 0) return 350;
-              if (d.depth == 1) return 330;
-              return 310;
-            })
-            .childrenMargin(d => 50)
-            .compactMarginBetween(d => 35)
-            .compactMarginPair(d => 30)
-            .neightbourMargin((a, b) => 20)
-            .buttonContent(({ node, state }) => {
-              return `<div style="border-radius:3px;padding:3px;font-size:10px;margin:auto auto;background-color:lightgray"> <span style="font-size:9px">${
+
+  <!-- JS -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="./assets/js/display_s3.js" type="text/javascript"></script>
+
+  <script>
+    var chart;
+    d3.csv(
+      './data.csv'
+    ).then(dataFlattened => {
+      chart = new d3.OrgChart()
+        .container('.chart-container')
+        .data(dataFlattened)
+        .nodeHeight(d => 70)
+        .nodeWidth(d => {
+          if (d.depth == 0) return 350;
+          if (d.depth == 1) return 330;
+          return 310;
+        })
+        .childrenMargin(d => 50)
+        .compactMarginBetween(d => 35)
+        .compactMarginPair(d => 30)
+        .neightbourMargin((a, b) => 20)
+        .buttonContent(({
+          node,
+          state
+        }) => {
+          return `<div style="border-radius:3px;padding:3px;font-size:10px;margin:auto auto;background-color:lightgray"> <span style="font-size:9px">${
                 node.children
                   ? `<i class="fas fa-chevron-up"></i>`
                   : `<i class="fas fa-chevron-down"></i>`
               }</span> ${node.data._directSubordinates}  </div>`;
-            })
-            .nodeContent(function(d, i, arr, state) {
-              const colors = ['#278B8D', '#404040', '#0C5C73', '#33C6CB'];
-              const color = d.data.instance_id == 'S3' ? '#c2c2c2' :colors[d.depth % colors.length];
-              return `
-              <div ${d.data.positionName == 'Instance' ? 'class="instance" onclick="showInfo()"' : ''}
-                style="background-color:${color}; position:absolute;margin-top:-1px; margin-left:-1px;width:${d.width}px;height:${d.height}px; border-radius: 5px;">
+        })
+        .nodeContent(function (d, i, arr, state) {
+          const colors = ['#278B8D', '#404040', '#0C5C73', '#33C6CB'];
+          const color = d.data.element == 's3' ? '#c2c2c2' : colors[d.depth % colors.length];
+          return `
+              <div ${d.data.element == 'instance' ? 'class="instance" data-type="ec2" onclick="showInfo(this)"' : ''}
+                  ${d.data.element == 'subnet' ? 'class="subnet" data-type="subnet" onclick="showInfo(this)"' : ''}
+                  ${d.data.element == 'VPC' ? 'class="vpc" data-type="vpc" onclick="showInfo(this)"' : ''}
+                style="${d.data.element == 's3' ? 'display:none;' : 'display:block;' } background-color:${color}; position:absolute;margin-top:-1px; margin-left:-1px;width:${d.width}px;height:${d.height}px; border-radius: 5px;">
                     <img src="
                     ${d.data.imageUrl}
                     " style="position:absolute;margin-top:5px;margin-left:${5}px;width:40px;height:40px; top:10px" />
-                 <div style="position:absolute;top:-15px;width:${
+                 <div class="element-box" style="position:absolute;top:-15px;width:${
                    d.width
                  }px;text-align:center;color:#fafafa;">
-                       <div style="margin:0 auto;background-color:${color};display:inline-block;padding:8px;padding-bottom:0px;border-radius:5px"> ${d.data.id}</div>
+                       <div class="element-id" style="margin:0 auto;background-color:${color};display:inline-block;padding:8px;padding-bottom:0px;border-radius:5px"> ${d.data.name}</div>
                 </div>
                 <div style="color:#fafafa;font-size:${
                   d.depth < 2 ? 16 : 12
-                }px;font-weight:bold;margin-left:70px;margin-top:15px"> ${d.depth < 2 ? d.data.instance_id : (d.data.instance_id || '').trim().split(/\s+/g)[0]} </div>
+                }px;font-weight:bold;margin-left:70px;margin-top:15px"> ${d.depth < 2 ? d.data.element : (d.data.element || '').trim().split(/\s+/g)[0]} </div>
                 <div style="color:#fafafa;margin-left:70px;margin-top:5px"> ${
-                  d.depth < 2 ? d.data.positionName : d.data.area
+                  d.depth < 2 ? d.data.id : d.data.id
                 } </div>
                 
                  <!--
@@ -149,30 +160,106 @@
                  -->
              </div>
             `;
-            })
-            .render();
-        });
+        })
+        .render();
+    });
 
-        function showAll() {
-            chart.setUpToTheRootHighlighted("1").render().fit()
-        }
-        function showInfo() {
-            $('.sidenav').toggleClass('animate');
-        }
-      </script>
 
-      <script>
-          $('.inst').click(function(){
-            $('.sidenav').toggleClass('animate');
-          });
+    function showAll() {
+      chart.setUpToTheRootHighlighted("1").render().fit()
+    }
 
-         $('.closebtn').click(function() {
-            $(".sidenav").removeClass('animate');
-        });
+    function showInfo(clicked) {
+      var instance_title = document.getElementsByClassName('instance-id')[0];
+      var instance_id = clicked.children[3].innerText;
+      instance_title.textContent = instance_id;
+      var type = clicked.dataset.type;
+      
+      console.log(type);
 
-        function openSideNav() {
-            document.getElementsByClassName('sidenav').width = '350px';
-        }
-      </script>
+      if(clicked.className == type || clicked.className == 'instance') {
+        clicked.className += ' active';
+        $(clicked).removeClass('active');
+        $('.sidenav').removeClass('animate');
+        setTimeout(function() {
+          $('.sidenav').addClass('animate');
+        }, 500);
+      }
+
+      jQuery.ajax({
+        type : "get",
+        url : "/information/" + type + "/ID/" + instance_id,
+        dataType : "json",
+        async : true,
+        success : function(result)
+        {
+          $('#Name').text(result['Name']);
+          $('#InstanceType').text(result['InstanceType']);
+          $('#PublicIpAddress').text(result['PublicIpAddress']);
+          $('#PrivateIpAddress').text(result['PrivateIpAddress']);
+          $('#Subnet_Id').text(result['Subnet_Id']);
+          $('#InstanceId').text(result['InstanceId']);
+          $('#State').text(result['State']);
+        },
+        error : function(xhr, ajaxSettings, thrownError) 
+        {
+            alert("수정하는데 오류가 발생하였습니다.");
+        },
+      });	
+    }
+  </script>
+
+  <script type="text/javascript">
+    $('#off').click(function(){
+      var id = $('.instance-id').text();
+      var type = id.split("-")[0];
+  
+      if(type == "i") {
+        type = 'ec2';
+      }
+
+      jQuery.ajax({
+        type : "get",
+        url : "/option/3/type/" + type + "/instanceId/" + id,
+        dataType : "json",
+        async : true,
+        success : function(result)
+        {
+          alert("종료가 완료되었습니다.");
+        },
+        error : function(xhr, ajaxSettings, thrownError) 
+        {
+          alert("종료 중 오류가 발생하였습니다.");
+        },
+      });	
+    });
+
+    $('#delete').click(function(){
+      var id = $('.instance-id').text();
+      var type = id.split("-")[0];
+  
+      if(type == "i") {
+        type = 'ec2';
+      }
+
+      jQuery.ajax({
+        type : "get",
+        url : "/option/4/type/" + type + "/instanceId/" + id,
+        dataType : "json",
+        async : true,
+        success : function(result)
+        {
+          alert("삭제가 완료되었습니다.");
+        },
+        error : function(xhr, ajaxSettings, thrownError) 
+        {
+          alert("삭제 중 오류가 발생하였습니다.");
+        },
+      });	
+    });
+  </script>
+
+  <script src="./assets/js/control_nav.js"></script>
 </body>
+
 </html>

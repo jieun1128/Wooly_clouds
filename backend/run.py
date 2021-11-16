@@ -104,7 +104,7 @@ def information(_type, _instanceId):
         result = VPCList(boto_session, userInfo, 2, _instanceId)
     elif _type == 'subnet':
         result = subnetList(boto_session, 2, _instanceId)
-
+    
     return render_template('visual.html', instanceInformation=result) # rendering 필요 
 
 @app.route('/option/<string:_option>/type/<string:_type>/instanceId/<string:_instanceId>', methods=['GET'])
