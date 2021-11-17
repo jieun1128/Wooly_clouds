@@ -33,26 +33,9 @@
     <a href="javascript:void(0)" class="closebtn">&times;</a>
     <div class="instance-info">
       <h2 id="Name"></h2>
-      <p class="instance-info-label">instance id</p>
+      <p class="instance-info-label">id</p>
       <p class="instance-id"></p>
-      <br />
-      <p class="instance-info-label">instance type</p>
-      <p id="InstanceType"></p>
-      <br />
-      <p class="instance-info-label">public ip</p>
-      <p id="PublicIpAddress"></p>
-      <br />
-      <p class="instance-info-label">private ip</p>
-      <p id="PrivateIpAddress"></p>
-      <br />
-      <p class="instance-info-label">subnet id</p>
-      <p id="Subnet_Id"></p>
-      <br />
-      <p class="instance-info-label">instance id</p>
-      <p id="InstanceId"></p>
-      <br />
-      <p class="instance-info-label">State</p>
-      <p id="State"></p>
+      <div class="instance-info-wrap"></div>
     </div>
     <div class='btn-flex'>
       <a href="#" class="control-instance" id="off">종료</a>
@@ -177,6 +160,12 @@
       
       console.log(type);
 
+      if(type == 'ec2' || type == 's3') {
+        $('.btn-flex').css('display', 'flex');
+      } else {
+        $('.btn-flex').css('display', 'none');
+      }
+
       if(clicked.className == type || clicked.className == 'instance') {
         clicked.className += ' active';
         $(clicked).removeClass('active');
@@ -193,13 +182,35 @@
         async : true,
         success : function(result)
         {
-          $('#Name').text(result['Name']);
-          $('#InstanceType').text(result['InstanceType']);
-          $('#PublicIpAddress').text(result['PublicIpAddress']);
-          $('#PrivateIpAddress').text(result['PrivateIpAddress']);
-          $('#Subnet_Id').text(result['Subnet_Id']);
-          $('#InstanceId').text(result['InstanceId']);
-          $('#State').text(result['State']);
+          $('.instance-info-wrap').empty();
+          if(type == 'ec2') {
+            var list = ['GroupId', 'GroupName', 'ImageId', 'InstanceType', 'KeyName', 'Subnet_Id', 'VpcId', 'State'];
+            setInfo(list);
+            if(result[list[list.length-1]] == 'stopped') {
+              $('#off').text('시작');
+              $('#off').mouseover(function(){$(this).css("background", "#7ADFFF");});
+              $('#off').mouseleave(function(){$(this).css("background", "#fff");});
+            }
+          } else if(type == 'subnet') {
+            var list = ['AvailabilityZone', 'CidrBlock', 'Subnet_Id', 'VpcId', 'State'];
+            setInfo(list);
+          } else if(type == 'vpc') {
+            var list = ['CidrBlock', 'State'];
+            setInfo(list);
+          }
+
+          function setInfo(list) {
+            $('#Name').text(result['Name']);
+            for(var i=0; i < list.length; i++){
+              var $title = $('<p class="instance-info-label instance-info-label-' + i +'"></p>');
+              $('.instance-info-wrap').append($title);
+              $('.instance-info-label-' + i).text(list[i]);
+
+              var $data = $('<p id="Info_' + i + '"></p>');
+              $('.instance-info-wrap').append($data);
+              $('#Info_' + i).text(result[list[i]]);
+            }
+          }
         },
         error : function(xhr, ajaxSettings, thrownError) 
         {

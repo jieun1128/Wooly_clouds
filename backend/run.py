@@ -4,7 +4,7 @@ import boto3
 import botocore
 from flask_swagger_ui import get_swaggerui_blueprint
 from Instance import ec2List, s3List, VPCList, subnetList, IGWList, NGWList, getRootInfo
-from addInstance import addEC2, addVPC, addSubnet
+# from addInstance import addEC2, addVPC, addSubnet
 import pandas as pd
 
 app = Flask(__name__,static_url_path='',static_folder="templates") 
