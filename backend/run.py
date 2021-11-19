@@ -120,6 +120,8 @@ def stopInstance(_option, _type, _instanceId):
             result = ec2List(boto_session, 3, _instanceId)
         elif _option == '4': # option == 4면 인스턴스 삭제
             result = ec2List(boto_session, 4, _instanceId)
+        elif _option == '5':
+            result = ec2List(boto_session, 5, _instanceId)
     else :
         result = s3List(boto_session, 3, _instanceId) # s3 인스턴스를 삭제한다. 그런데 ec2와는 다르게 ID가 아니라 인스턴스의 이름을 보내야 한다.
 
