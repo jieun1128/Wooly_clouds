@@ -2,16 +2,19 @@ from boto3 import NullHandler, session
 import botocore
 
 imageUrl = {
+    "USER" : "https://firebasestorage.googleapis.com/v0/b/confident-35184.appspot.com/o/user_profile.png?alt=media&token=4775b50e-531f-418a-9da7-8256d0bb594c",
     "VPC" : "https://firebasestorage.googleapis.com/v0/b/confident-35184.appspot.com/o/vpc.png?alt=media&token=746f89eb-c3b1-45c2-b7ab-b5195184ef12",
     "SUBNET" : "https://firebasestorage.googleapis.com/v0/b/confident-35184.appspot.com/o/subnet.png?alt=media&token=74784509-f005-4fae-9771-efaf46822c73",
     "S3" : "https://firebasestorage.googleapis.com/v0/b/confident-35184.appspot.com/o/S3.png?alt=media&token=86dba17a-85e6-446b-b1a5-9581847df29b",
-    "EC2" : "https://firebasestorage.googleapis.com/v0/b/confident-35184.appspot.com/o/instance.png?alt=media&token=e464b262-64b8-4388-b2c7-61822b3d1e64"
+    "EC2" : "https://firebasestorage.googleapis.com/v0/b/confident-35184.appspot.com/o/instance.png?alt=media&token=e464b262-64b8-4388-b2c7-61822b3d1e64",
+    "IGW" : "https://firebasestorage.googleapis.com/v0/b/confident-35184.appspot.com/o/IGW.png?alt=media&token=2727660d-f9c0-4106-a831-2364184a00ac",
+    "NGW" : "https://firebasestorage.googleapis.com/v0/b/confident-35184.appspot.com/o/NatGW.png?alt=media&token=9599fd89-65c5-41aa-8847-c6685ff8a3b7"
 }
 
 def getRootInfo(session):
     information = {}
     information["element"] = session[2]
-    information["imageUrl"] = imageUrl['VPC']
+    information["imageUrl"] = imageUrl['USER']
     information["id"] = session[2]
     information["parentId"] = None
     return [information]
@@ -30,7 +33,6 @@ def ec2List(boto_session, option, instanceID):
                 information["element"] = "instance"
                 information["imageUrl"] = imageUrl['EC2']
                 information["id"] = instance["InstanceId"]
-                # information["parentId"] = instance["SubnetId"]
                 try: 
                     information["parentId"] = instance["SubnetId"]
                 except:
@@ -81,7 +83,7 @@ def ec2List(boto_session, option, instanceID):
             else:
                 raise
         return "인스턴스 중지 완료"
-    else :                      # 인스턴스 삭제하기  (option == 4 일경우)
+    elif option == 4:                      # 인스턴스 삭제하기  (option == 4 일경우)
         try:
             # Terminate an instance
             ec2_client.terminate_instances(InstanceIds=[instanceID], DryRun=False)
@@ -91,7 +93,16 @@ def ec2List(boto_session, option, instanceID):
             else:
                 raise
         return "인스턴스 삭제 완료"
-        
+    else :
+        try:
+            # Reboot an instance
+            response = ec2_client.start_instances(InstanceIds=[instanceID], DryRun=False)
+        except botocore.exceptions.ClientError as e:
+            if e.response['Error']['Code'] == "InvalidInstanceID.Malformed":
+                print("Error: Invalid instance id!!")
+            else:
+                raise
+        return "인스턴스 시작 완료"
 
 
 def s3List(boto_session, session, option, bucketName):
