@@ -163,8 +163,40 @@
             }
           }
         }
+      },
+      "/add": {
+        "post": {
+          "tags": [
+            {
+              "name": "Add Instance Test"
+            }
+          ],
+          "requestBody": {
+            "description": "Login Post Request",
+            "required": true,
+            "content": {
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "$ref": "#/components/schemas/s3"
+                }
+              }
+            }
+          },
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "201": {
+              "description": "OK"
+            },
+            "400": {
+              "description": "Failed. Bad post data."
+            }
+          }
+        }
       }
     },
+    
 
     "components": {
       "schemas": {
@@ -193,7 +225,77 @@
               "type": "string"
             }
           }
+        },
+
+        "ec2": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string"
+            },
+            "subnetId": {
+              "type": "string"
+            },
+            "groups": {
+              "type": "string"
+            },
+            "keyname": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            }
+          }
+        },
+
+        "vpc": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string"
+            },
+            "cidrBlock": {
+              "type": "string"
+            },
+            "Name": {
+              "type": "string"
+            }
+          }
+        },
+
+        "subnet": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string"
+            },
+            "VpcId": {
+              "type": "string"
+            },
+            "cidrBlock": {
+              "type": "string"
+            },
+            "availabilityZone": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            }
+          }
+        },
+
+        "s3": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            }
+          }
         }
+
       }
     }
 
