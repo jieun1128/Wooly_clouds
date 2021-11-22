@@ -5,7 +5,5 @@ VPC,https://firebasestorage.googleapis.com/v0/b/confident-35184.appspot.com/o/vp
 subnet,https://firebasestorage.googleapis.com/v0/b/confident-35184.appspot.com/o/subnet.png?alt=media&token=74784509-f005-4fae-9771-efaf46822c73,subnet-06cf995b42d89862f,vpc-0090ae5d05005d897,my_public_subnet
 subnet,https://firebasestorage.googleapis.com/v0/b/confident-35184.appspot.com/o/subnet.png?alt=media&token=74784509-f005-4fae-9771-efaf46822c73,subnet-0fee21e68c7e8f07e,vpc-0090ae5d05005d897,my_private_subnet
 s3,https://firebasestorage.googleapis.com/v0/b/confident-35184.appspot.com/o/S3.png?alt=media&token=86dba17a-85e6-446b-b1a5-9581847df29b,woolycloudbucket,ap-northeast-2,
-instance,https://firebasestorage.googleapis.com/v0/b/confident-35184.appspot.com/o/instance.png?alt=media&token=e464b262-64b8-4388-b2c7-61822b3d1e64,i-0c7e2dbf9143e5ee0,ap-northeast-2,ec2_instance1
-instance,https://firebasestorage.googleapis.com/v0/b/confident-35184.appspot.com/o/instance.png?alt=media&token=e464b262-64b8-4388-b2c7-61822b3d1e64,i-07477ebfbda452945,subnet-06cf995b42d89862f,ec2_instance2
 instance,https://firebasestorage.googleapis.com/v0/b/confident-35184.appspot.com/o/instance.png?alt=media&token=e464b262-64b8-4388-b2c7-61822b3d1e64,i-0c912d4d36a7de1ad,subnet-0fee21e68c7e8f07e,ec2_private2
 instance,https://firebasestorage.googleapis.com/v0/b/confident-35184.appspot.com/o/instance.png?alt=media&token=e464b262-64b8-4388-b2c7-61822b3d1e64,i-0fb90535a2932068d,subnet-0fee21e68c7e8f07e,ec2_private1

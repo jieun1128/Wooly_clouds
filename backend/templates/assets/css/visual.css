@@ -152,6 +152,7 @@ a.active { background-color: #fff; color: #000;}
   .sidenav p.instance-info-label {
       color: #9d9d9d;
       /* font-weight: 600; */
+      margin-top: 10px;
   }
 
   .sidenav .btn-flex {
