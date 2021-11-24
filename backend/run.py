@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, session, url_for, redirect
+from flask import Flask, render_template, request, session, url_for, redirect
 from flask_cors import CORS
 import boto3
 import botocore
@@ -71,13 +71,12 @@ def visualize():
         temp.append(subnetList(boto_session,1, ''))
         temp.append(s3List(boto_session, userInfo, 1, ''))
         temp.append(ec2List(boto_session,1, ''))
+        temp.append(IGWList(boto_session, 1, ''))
+        temp.append(NGWList(boto_session, 1, ''))
 
         for i in temp:
             if i is not None :
                 result.extend(i)
-        
-        #result.extend(IGWList(boto_session, 1, ''))
-        #result.extend(NGWList(boto_session, 1, ''))
 
         df = pd.json_normalize(result)
         df = df.set_index("element")
@@ -104,6 +103,10 @@ def information(_type, _instanceId):
         result = VPCList(boto_session, userInfo, 2, _instanceId)
     elif _type == "subnet" :
         result = subnetList(boto_session, 2, _instanceId)
+    elif _type == "igw" :
+        result = IGWList(boto_session, 2, _instanceId)
+    else :
+        result = NGWList(boto_session, 2, _instanceId)
 
     return result
 
