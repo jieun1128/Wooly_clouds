@@ -96,7 +96,7 @@ body {
     -o-border-radius: 10px;
 }
 
-.navbar { width: 100%; background-color: #7ADFFF; overflow: auto;}
+.navbar { width: 100%; background-color: #525bff; overflow: auto;}
 .navbar a { float: left; padding: 12px; color: white; text-decoration: none; font-size: 17px;}
 .navbar a:hover { background-color: #3bc4ee;}
 .navbar a.active:hover { background-color: #3bc4ee;}
@@ -295,3 +295,67 @@ a.active { background-color: #fff; color: #000;}
 .s3-box.active { border: 5px solid #8F00FF; bottom: 50%; transform: translate(-50%, 50%); transform: scale(1.1); -webkit-transform: translate(-50%, 50%); -moz-transform: translate(-50%, 50%); -ms-transform: translate(-50%, 50%); -o-transform: translate(-50%, 50%); }
 
 div { transition: all .5s; -webkit-transition: all .5s; -moz-transition: all .5s; -ms-transition: all .5s; -o-transition: all .5s; }
+
+
+/* choose instance */
+.instance-item {
+    margin: 30px 4px 4px 4px;
+    background-color:#EFEFEF;
+    border-radius:4px;
+    /* border:1px solid #D0D0D0; */
+    overflow:auto;
+    float:left;
+    cursor: pointer;
+}
+.instance-item label {
+    float:left;
+    width: 100%;
+    cursor: pointer;
+}
+.instance-item label span {
+    text-align:center;
+    padding:3px 0px;
+    display:block;
+}
+.instance-item label input {
+    position:absolute;
+    top:-20px;
+}
+.instance-item input:checked + span {
+    background-color:#3d4aff;
+    color:#fff;
+    width: 100%;
+}
+.contents .login-box.add-instance {
+    width: 40%;
+}
+.instance-list {
+    display: flex;
+    width: 100%;
+    overflow: hidden;
+}
+.instance-list .instance-item {
+    width: 100%;
+}
+.contents .login-box form.form-wrap {
+    display: none;
+}
+.contents .login-box form.form-wrap--ec2 {
+    display: block;
+}
+.form-wrap input {
+    border: 1px solid #c2c2c2;
+    padding: 8px 15px;
+    margin: 5px 0;
+    font-size: 18px;
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+}
+.form-wrap input::placeholder {
+    color: #cacaca;
+}

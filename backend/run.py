@@ -4,7 +4,7 @@ import boto3
 import botocore
 from flask_swagger_ui import get_swaggerui_blueprint
 from Instance import ec2List, s3List, VPCList, subnetList, IGWList, NGWList, getRootInfo
-from addInstance import addEC2, addVPC, addSubnet, addS3
+from addInstance import addEC2, addVPC, addSubnet
 import pandas as pd
 
 app = Flask(__name__,static_url_path='',static_folder="templates") 
@@ -139,7 +139,7 @@ def addInstance():
     if request.form["type"] == "ec2":
         addEC2(boto_session, request.form)
     elif request.form["type"] == "s3":
-        addS3(boto_session, userInfo, request.form)
+        print("s3")
     elif request.form["type"] == "vpc":
         addVPC(boto_session, request.form)
     elif request.form["type"] == "subnet":

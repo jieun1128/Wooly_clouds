@@ -26,7 +26,7 @@
     <a class="highlight btn-s3" href="#"> S3</a>
     <a class="highlight">IGW</a>
     <a class="highlight">NAT_GW</a>
-    <a class="./login.html" class="signIn">Logout</a>
+    <a class="./login.html" class="signIn" id="Logout">Logout</a>
   </div>
 
   <div class="sidenav">
@@ -228,21 +228,44 @@
       if(type == "i") {
         type = 'ec2';
       }
-
-      jQuery.ajax({
-        type : "get",
-        url : "/option/3/type/" + type + "/instanceId/" + id,
-        dataType : "json",
-        async : true,
-        success : function(result)
-        {
-          alert("종료가 완료되었습니다.");
-        },
-        error : function(xhr, ajaxSettings, thrownError) 
-        {
-          alert("종료 중 오류가 발생하였습니다.");
-        },
-      });	
+      
+      if($('#off').text() == '종료') {
+  
+        jQuery.ajax({
+          type : "get",
+          url : "/option/3/type/" + type + "/instanceId/" + id,
+          dataType : "json",
+          async : true,
+          success : function(result)
+          {
+            alert("종료가 완료되었습니다.");
+            $('#off').text('시작');
+          },
+          error : function(xhr, ajaxSettings, thrownError) 
+          {
+            alert("종료 중 오류가 발생하였습니다.");
+            $('#off').text('시작');
+          },
+        });	
+      } else if($('#off').text() == '시작') {
+        console.log('시작!!');
+        jQuery.ajax({
+          type : "get",
+          url : "/option/5/type/" + type + "/instanceId/" + id,
+          dataType : "json",
+          async : true,
+          success : function(result)
+          {
+            alert("인스턴스가 시작되었습니다.");
+            $('#off').text('종료');
+          },
+          error : function(xhr, ajaxSettings, thrownError) 
+          {
+            alert("인스턴스 시작 중 오류가 발생하였습니다.");
+            $('#off').text('종료');
+          },
+        });	
+      }
     });
 
     $('#delete').click(function(){
@@ -265,6 +288,25 @@
         error : function(xhr, ajaxSettings, thrownError) 
         {
           alert("삭제 중 오류가 발생하였습니다.");
+        },
+      });	
+    });
+  </script>
+
+  <script type="text/javascript">
+    $('#Logout').click(function() {
+      jQuery.ajax({
+        type : "get",
+        url : "/logout",
+        async : true,
+        success : function(result)
+        {
+          alert("로그아웃 되었습니다.");
+          location.href = "./new.html";
+        },
+        error : function(xhr, ajaxSettings, thrownError) 
+        {
+          alert("로그아웃 중 오류가 발생하였습니다.");
         },
       });	
     });

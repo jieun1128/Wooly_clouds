@@ -37,17 +37,117 @@
     <div class="contents">
         <h1 class="title add-page">Add Instance</h1>
         <h4>Choose Instance want to create</h4>
-        <div class="login-box">
+        <div class="login-box add-instance">
             <form action="">
-                <select name="addInstance" id="AddInstance">
-                    <option value="Instance1">Instance1</option>
-                    <option value="Instance2">Instance2</option>
-                    <option value="Instance3">Instance3</option>
-                </select>
-                <!-- type="submit" 으로 변경 시 ?addInstance=Instance1 -->
-                <button type="button" class="btn-submit" onclick="location.href='createEC2.html'">Next</button>
+                <div class="instance-list">
+                    <div class="instance-item">
+                       <label>
+                          <input type="radio" name="option" id="" value="ec2" checked=""><span class="instance-option">EC2</span>
+                       </label>
+                    </div>
+                    <div class="instance-item">
+                        <label>
+                           <input type="radio" name="option" id="" value="vpc"><span class="instance-option">VPC</span>
+                        </label>
+                     </div>
+                     <div class="instance-item">
+                        <label>
+                           <input type="radio" name="option" id="" value="subnet"><span class="instance-option">Subnet</span>
+                        </label>
+                     </div>
+                     <div class="instance-item">
+                         <label>
+                            <input type="radio" name="option" id="" value="s3"><span class="instance-option">S3</span>
+                        </label>
+                    </div>
+                </div>
             </form>
+
+                <form class="form-wrap form-wrap--ec2">
+                    <input type="text" name="type" placeholder="Type" value="ec2">
+                    <input type="text" name="subnetId" placeholder="Subnet ID">
+                    <input type="text" name="groups" placeholder="Groups">
+                    <input type="text" name="keyname" placeholder="KeyName">
+                    <input type="text" name="name" placeholder="Name">
+                </form>
+
+                <form class="form-wrap form-wrap--vpc">
+                    <input type="text" name="type" placeholder="Type" value="vpc">
+                    <input type="text" name="cidrBlock" placeholder="cidrBlock">
+                    <input type="text" name="name" placeholder="Name">
+                </form>
+
+                <form class="form-wrap form-wrap--subnet">
+                    <input type="text" name="type" placeholder="Type" value="subnet">
+                    <input type="text" name="VpcId" placeholder="VPC ID">
+                    <input type="text" name="cidrBlock" placeholder="cidrBlock">
+                    <input type="text" name="availabilityZone" placeholder="Availability Zone">
+                    <input type="text" name="name" placeholder="Name">
+                </form>
+
+                <form class="form-wrap form-wrap--s3">
+                    <input type="text" name="type" placeholder="Type" value="s3">
+                    <input type="text" name="name" placeholder="Name">
+                </form>
+                <!-- type="submit" 으로 변경 시 ?addInstance=Instance1 -->
+                <button type="button" class="btn-submit">Create</button>
         </div>
     </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        var type = 'ec2';
+        
+        $('.instance-option').click(function(){
+            if($(this).text() == 'EC2') {
+                $('.form-wrap').css('display', 'none')
+                $('.form-wrap--ec2').css('display', 'block')
+                type = 'ec2';
+            } else if($(this).text() == 'VPC') {
+                $('.form-wrap').css('display', 'none')
+                $('.form-wrap--vpc').css('display', 'block')
+                type = 'vpc';
+            } else if($(this).text() == 'Subnet') {
+                $('.form-wrap').css('display', 'none')
+                $('.form-wrap--subnet').css('display', 'block')
+                type = 'subnet';
+            } else if($(this).text() == 'S3') {
+                $('.form-wrap').css('display', 'none')
+                $('.form-wrap--s3').css('display', 'block')
+                type = 's3';
+            }
+        });
+
+
+        $('.btn-submit').click(function(){
+            console.log('start');
+            if(type = 'ec2') {
+                var data = $('.form-wrap--ec2').serialize();
+            } else if(type = 'vpc') {
+                var data = $('.form-wrap--vpc').serialize();
+            } else if(type = 'subnet') {
+                var data = $('.form-wrap--subnet').serialize();
+            } else if(type = 's3') {
+                var data = $('.form-wrap--s3').serialize();
+            }
+            jQuery.ajax({
+                type : "post",
+                url : "/add",
+                dataType : "json",
+                async : true,
+                data: data,
+                success : function(data)
+                {
+                    console.log(data)
+                    alert("인스턴스 생성을 완료했습니다.");
+                },
+                error : function(xhr, ajaxSettings, thrownError) 
+                {
+                    console.log(data)
+                    alert("인스턴스 생성 중 오류가 발생하였습니다.");
+                },
+            });	
+        });
+    </script>
 </body>
 </html>
