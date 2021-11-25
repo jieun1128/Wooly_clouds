@@ -14,24 +14,24 @@ imageUrl = {
 def getRootInfo(session):
     information = {}
     information["element"] = session[2]
-    information["imageUrl"] = imageUrl['USER']
+    information["imageUrl"] = imageUrl["USER"]
     information["id"] = session[2]
     information["parentId"] = None
     return [information]
 
 
 def ec2List(boto_session, option, instanceID):
-    ec2_client = boto_session.client('ec2')
+    ec2_client = boto_session.client("ec2")
     if option == 1: # 모든 ec2 인스턴스 정보 불러오기 
         ec2List = []
         responses = ec2_client.describe_instances().get("Reservations")
         for response in responses :
             for instance in response["Instances"]:
-                if instance['State']['Name'] == 'terminated':
+                if instance["State"]["Name"] == "terminated":
                     continue
                 information = {}
                 information["element"] = "instance"
-                information["imageUrl"] = imageUrl['EC2']
+                information["imageUrl"] = imageUrl["EC2"]
                 information["id"] = instance["InstanceId"]
                 try: 
                     information["parentId"] = instance["SubnetId"]
@@ -39,28 +39,26 @@ def ec2List(boto_session, option, instanceID):
                     information["parentId"] = "ap-northeast-2"
                 information["name"] = instance["Tags"][0]["Value"]
                 ec2List.append(information)
-        print(ec2List)
         return ec2List
     elif option == 2 : # 특정 ec2 인스턴스 정보 불러오기 
         try:
             # Describe an instance
             ec2Info = dict()
-            response = ec2_client.describe_instances(InstanceIds=[instanceID]).get('Reservations')[0]['Instances'][0]
-            ec2Info['InstanceId'] = response['InstanceId']
-            ec2Info['ImageId'] = response['ImageId']
-            ec2Info['InstanceType'] = response['InstanceType']
-            ec2Info['State'] = response['State']['Name']
-            ec2Info['Subnet_Id'] = response['SubnetId']
-            ec2Info['VpcId'] = response['VpcId']
-            ec2Info['Name'] = response['Tags'][0]['Value']
-            ec2Info['KeyName'] = response['KeyName']
-            ec2Info['GroupName'] = response['SecurityGroups'][0]['GroupName']
-            ec2Info['GroupId'] = response['SecurityGroups'][0]['GroupId']
-            if response['State']['Name'] == 'running':
-                ec2Info['PrivateDnsName'] = response['PrivateDnsName']
-                ec2Info['PrivateIpAddress'] = response['PrivateIpAddress']
-                ec2Info['PublicDnsName'] = response['PublicDnsName']
-                ec2Info['PublicIpAddress'] = response['PublicIpAddress']
+            response = ec2_client.describe_instances(InstanceIds=[instanceID]).get("Reservations")[0]["Instances"][0]
+            ec2Info["InstanceId"] = response["InstanceId"]
+            ec2Info["ImageId"] = response["ImageId"]
+            ec2Info["InstanceType"] = response["InstanceType"]
+            ec2Info["State"] = response["State"]["Name"]
+            ec2Info["Subnet_Id"] = response["SubnetId"]
+            ec2Info["VpcId"] = response["VpcId"]
+            ec2Info["Name"] = response["Tags"][0]["Value"]
+            ec2Info["KeyName"] = response["KeyName"]
+            ec2Info["GroupName"] = response["SecurityGroups"][0]["GroupName"]
+            ec2Info["GroupId"] = response["SecurityGroups"][0]["GroupId"]
+            if response["State"]["Name"] == "running":
+                ec2Info["PrivateDnsName"] = response["PrivateDnsName"]
+                ec2Info["PrivateIpAddress"] = response["PrivateIpAddress"]
+                ec2Info["PublicDnsName"] = response["PublicDnsName"]
             else :
                 ec2Info["PrivateDnsName"] = ''
                 ec2Info["PrivateIpAddress"] = ''
@@ -68,17 +66,22 @@ def ec2List(boto_session, option, instanceID):
                 ec2Info["PublicIpAddress"] = ''
 
         except botocore.exceptions.ClientError as e:
-            if e.response['Error']['Code'] == "MissingParameter":
+            if e.response["Error"]["Code"] == "MissingParameter":
                 print("Error: Missing instance id!!")
             else:
                 raise
+
+        try:
+            ec2Info["PublicIpAddress"] = response["PublicIpAddress"]
+        except :
+            ec2Info["PublicIpAddress"] = ''
         return ec2Info
     elif option == 3:           # 인스턴스 중지하기
         try:
             # Stop an instance
             ec2_client.stop_instances(InstanceIds=[instanceID], DryRun=False)
         except botocore.exceptions.ClientError as e:
-            if e.response['Error']['Code'] == "InvalidInstanceID.Malformed":
+            if e.response["Error"]["Code"] == "InvalidInstanceID.Malformed":
                 print("Error: Invalid instance id!!")
             else:
                 raise
@@ -88,7 +91,7 @@ def ec2List(boto_session, option, instanceID):
             # Terminate an instance
             ec2_client.terminate_instances(InstanceIds=[instanceID], DryRun=False)
         except botocore.exceptions.ClientError as e:
-            if e.response['Error']['Code'] == "InvalidInstanceID.Malformed":
+            if e.response["Error"]["Code"] == "InvalidInstanceID.Malformed":
                 print("Error: Invalid instance id!!")
             else:
                 raise
@@ -98,7 +101,7 @@ def ec2List(boto_session, option, instanceID):
             # Reboot an instance
             response = ec2_client.start_instances(InstanceIds=[instanceID], DryRun=False)
         except botocore.exceptions.ClientError as e:
-            if e.response['Error']['Code'] == "InvalidInstanceID.Malformed":
+            if e.response["Error"]["Code"] == "InvalidInstanceID.Malformed":
                 print("Error: Invalid instance id!!")
             else:
                 raise
@@ -106,14 +109,14 @@ def ec2List(boto_session, option, instanceID):
 
 
 def s3List(boto_session, session, option, bucketName):
-    s3_client = boto_session.client('s3')
+    s3_client = boto_session.client("s3")
 
 
     if option == 1 :    # 모든 s3 인스턴스 정보 불러오기 
         list_buckets_resp = s3_client.list_buckets()
         bucketList = []
 
-        for bucket in list_buckets_resp['Buckets']:
+        for bucket in list_buckets_resp["Buckets"]:
             information = {}
             information["element"] = "s3"
             information["imageUrl"] = imageUrl["S3"]
@@ -128,19 +131,19 @@ def s3List(boto_session, session, option, bucketName):
             s3objects = s3_client.list_objects_v2(Bucket=bucketName)
 
         except botocore.exceptions.ClientError as e:
-            if e.response['Error']['Code'] == "NoSuchBucket":
+            if e.response["Error"]["Code"] == "NoSuchBucket":
                 return "Error: Bucket does not exist!!"
-            elif e.response['Error']['Code'] == "InvalidBucketName":
+            elif e.response["Error"]["Code"] == "InvalidBucketName":
                 return "Error: Invalid Bucket name!!"
             else:
                 raise
         
-        return s3objects['Name']
+        return s3objects["Name"]
     elif option == 3:               # s3 인스턴스 삭제하기 
         try:
             s3_client.terminate_instances(InstanceIds=[bucketName], DryRun=False)
         except botocore.exceptions.ClientError as e:
-            if e.response['Error']['Code'] == "InvalidInstanceID.Malformed":
+            if e.response["Error"]["Code"] == "InvalidInstanceID.Malformed":
                 print("Error: Invalid instance id!!")
             else:
                 raise
@@ -148,7 +151,7 @@ def s3List(boto_session, session, option, bucketName):
 
 
 def VPCList(boto_session, session, option, vpcID):
-    ec2_client = boto_session.client('ec2')
+    ec2_client = boto_session.client("ec2")
 
     if option == 1 :       # 모든 VPC List 불러오기 
         responses = ec2_client.describe_vpcs().get("Vpcs")
@@ -166,23 +169,23 @@ def VPCList(boto_session, session, option, vpcID):
         try :
             vpcInfo = dict()
             response = ec2_client.describe_vpcs(VpcIds=[vpcID]).get("Vpcs")[0]
-            vpcInfo['VpcId'] = response['VpcId']
-            vpcInfo['CidrBlock'] = response['CidrBlock']
-            vpcInfo['State'] = response['State']
-            vpcInfo['Name'] = response['Tags'][0]['Value']
+            vpcInfo["VpcId"] = response["VpcId"]
+            vpcInfo["CidrBlock"] = response["CidrBlock"]
+            vpcInfo["State"] = response["State"]
+            vpcInfo["Name"] = response["Tags"][0]["Value"]
 
         except botocore.exceptions.ClientError as e:
-            if e.response['Error']['Code'] == "MissingParameter":
+            if e.response["Error"]["Code"] == "MissingParameter":
                 print("Error: Missing instance id!!")
             else:
                 raise
         return vpcInfo
 
 def subnetList(boto_session, option, subnetID):
-    ec2_client = boto_session.client('ec2')
+    ec2_client = boto_session.client("ec2")
 
     if option == 1 :       # 모든 VPC List 불러오기 
-        responses = ec2_client.describe_subnets().get('Subnets')
+        responses = ec2_client.describe_subnets().get("Subnets")
         subnetList = []
         for response in responses :
             information = {}
@@ -197,15 +200,15 @@ def subnetList(boto_session, option, subnetID):
         try :
             subnetInfo = dict()
             response = ec2_client.describe_subnets(SubnetIds=[subnetID]).get("Subnets")[0]
-            subnetInfo['SubnetId'] = response['SubnetId']
-            subnetInfo['VpcId'] = response['VpcId']
-            subnetInfo['AvailabilityZone'] = response['AvailabilityZone']
-            subnetInfo['CidrBlock'] = response['CidrBlock']
-            subnetInfo['State'] = response['State']
-            subnetInfo['Name'] = response['Tags'][0]['Value']
+            subnetInfo["SubnetId"] = response["SubnetId"]
+            subnetInfo["VpcId"] = response["VpcId"]
+            subnetInfo["AvailabilityZone"] = response["AvailabilityZone"]
+            subnetInfo["CidrBlock"] = response["CidrBlock"]
+            subnetInfo["State"] = response["State"]
+            subnetInfo["Name"] = response["Tags"][0]["Value"]
 
         except botocore.exceptions.ClientError as e:
-            if e.response['Error']['Code'] == "MissingParameter":
+            if e.response["Error"]["Code"] == "MissingParameter":
                 print("Error: Missing instance id!!")
             else:
                 raise
@@ -213,52 +216,65 @@ def subnetList(boto_session, option, subnetID):
     
 
 def IGWList(boto_session, option, igwID):
-    ec2_client = boto_session.client('ec2')
+    ec2_client = boto_session.client("ec2")
 
     if option == 1 :       
-        responses = ec2_client.describe_IGWs().get('IGWs')
-        IGWList = []
+        responses = ec2_client.describe_internet_gateways().get("InternetGateways")
+        igwList = []
         for response in responses :
-            IGWList.append([response['IGWId']])
-        return IGWList
-    elif option == 2:
+            information = {}
+            information["element"] = "internet_gateway"
+            information["imageUrl"] = imageUrl["IGW"]
+            information["id"] = response["InternetGatewayId"]
+            information["parentId"] = response["Attachments"][0]["VpcId"]
+            information["name"] = response["Tags"][0]["Value"]
+            igwList.append(information)
+        return igwList
+    else :
         try :
-            IGWInfo = dict()
-            response = ec2_client.describe_IGWs(IGWIds=[igwID]).get("IGWs")[0]
-            IGWInfo['IGWId'] = response['IGWId']
-            IGWInfo['AvailabilityZone'] = response['AvailabilityZone']
-            IGWInfo['CidrBlock'] = response['CidrBlock']
-            IGWInfo['State'] = response['State']
-            IGWInfo['Name'] = response['Tags'][0]['Value']
+            igwInfo = dict()
+            response = ec2_client.describe_internet_gateways(InternetGatewayIds=[igwID]).get("InternetGateways")[0]
+            igwInfo["InternetGatewayId"] = response["InternetGatewayId"]
+            igwInfo["VpcId"] = response["Attachments"][0]["VpcId"]
+            igwInfo["State"] = response["Attachments"][0]["State"]
+            igwInfo["Name"] = response["Tags"][0]["Value"]
 
         except botocore.exceptions.ClientError as e:
-            if e.response['Error']['Code'] == "MissingParameter":
+            if e.response["Error"]["Code"] == "MissingParameter":
                 print("Error: Missing instance id!!")
             else:
                 raise
-        return IGWInfo
+        return igwInfo
 
 
 def NGWList(boto_session, option, ngwID):
-    ec2_client = boto_session.client('ec2') 
+    ec2_client = boto_session.client("ec2") 
     if option == 1 :       
-        responses = ec2_client.describe_nat_gateways().get('NGWs')
+        responses = ec2_client.describe_nat_gateways().get("NatGateways")
         NGWList = []
         for response in responses :
-            NGWList.append([response['NGWId']])
+            information = {}
+            information["element"] = "nat_gateway"
+            information["imageUrl"] = imageUrl["NGW"]
+            information["id"] = response["NatGatewayId"]
+            information["parentId"] = response["SubnetId"]
+            information["name"] = response["Tags"][0]["Value"]
+            NGWList.append(information)
         return NGWList
     elif option == 2:
         try :
             NGWInfo = dict()
-            response = ec2_client.describe_IGWs(NGWIds=[ngwID]).get("NGWs")[0]
-            NGWInfo['NGWId'] = response['NGWId']
-            NGWInfo['AvailabilityZone'] = response['AvailabilityZone']
-            NGWInfo['CidrBlock'] = response['CidrBlock']
-            NGWInfo['State'] = response['State']
-            NGWInfo['Name'] = response['Tags'][0]['Value']
+            response = ec2_client.describe_nat_gateways(NatGatewayIds=[ngwID]).get("NatGateways")[0]
+            NGWInfo["NatGatewayId"] = response["NatGatewayId"]
+            NGWInfo["VpcId"] = response["VpcID"]
+            NGWInfo["SubnetId"] = response["SubnetId"]
+            NGWInfo["State"] = response["State"]
+            NGWInfo["Name"] = response["Tags"][0]["Value"]
+            NGWInfo["NetworkInterfaceId"] = response["NatGatewayAddress"][0]["NetworkInterfaceId"]
+            NGWInfo["PrivateIp"] = response["NatGatewayAddress"][0]["PrivateIp"]
 
         except botocore.exceptions.ClientError as e:
-            if e.response['Error']['Code'] == "MissingParameter":
+            if e.response["Error"]["Code"] == "MissingParameter":
                 print("Error: Missing instance id!!")
             else:
                 raise
