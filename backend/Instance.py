@@ -215,7 +215,7 @@ def subnetList(boto_session, option, subnetID):
         return subnetInfo
     
 
-def IGWList(boto_session, option, igwID):
+def IGWList(boto_session, session, option, igwID):
     ec2_client = boto_session.client("ec2")
 
     if option == 1 :       
@@ -226,7 +226,8 @@ def IGWList(boto_session, option, igwID):
             information["element"] = "internet_gateway"
             information["imageUrl"] = imageUrl["IGW"]
             information["id"] = response["InternetGatewayId"]
-            information["parentId"] = response["Attachments"][0]["VpcId"]
+            information["parentId"] = session[2]
+            information["VPC"] = response["Attachments"][0]["VpcId"]
             information["name"] = response["Tags"][0]["Value"]
             igwList.append(information)
         return igwList

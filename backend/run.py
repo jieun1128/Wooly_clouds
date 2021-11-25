@@ -4,7 +4,7 @@ import boto3
 import botocore
 from flask_swagger_ui import get_swaggerui_blueprint
 from Instance import ec2List, s3List, VPCList, subnetList, IGWList, NGWList, getRootInfo
-from addInstance import addEC2, addVPC, addSubnet
+from addInstance import addEC2, addVPC, addSubnet, addS3
 import pandas as pd
 
 app = Flask(__name__,static_url_path='',static_folder="templates") 
@@ -67,12 +67,21 @@ def visualize():
         result = []
         temp = []
         temp.append(getRootInfo(userInfo))
-        temp.append(VPCList(boto_session, userInfo, 1,''))
         temp.append(subnetList(boto_session,1, ''))
         temp.append(s3List(boto_session, userInfo, 1, ''))
         temp.append(ec2List(boto_session,1, ''))
-        temp.append(IGWList(boto_session, 1, ''))
         temp.append(NGWList(boto_session, 1, ''))
+
+        igwInfo = IGWList(boto_session, userInfo ,1, '')
+        vpcInfo = VPCList(boto_session, userInfo, 1,'')
+
+        for vpc in vpcInfo :
+            for igw in igwInfo :
+                if vpc["id"] == igw["VPC"]:
+                    vpc["parentId"] = igw["id"]
+
+        temp.append(igwInfo)
+        temp.append(vpcInfo)
 
         for i in temp:
             if i is not None :
@@ -142,15 +151,12 @@ def addInstance():
     if request.form["type"] == "ec2":
         addEC2(boto_session, request.form)
     elif request.form["type"] == "s3":
-        print("s3")
+        addS3(boto_session, userInfo, request.form)
     elif request.form["type"] == "vpc":
         addVPC(boto_session, request.form)
     elif request.form["type"] == "subnet":
         addSubnet(boto_session, request.form)
-    elif request.form["type"] == "igw":
-        print("igw")
-    else:
-        print("ngw")
+        
     return ""
 
 if __name__ == "__main__":
