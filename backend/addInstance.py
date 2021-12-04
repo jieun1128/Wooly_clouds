@@ -16,7 +16,7 @@ def addEC2(boto_session, information):
             "AssociatePublicIpAddress": True,
             "Groups": [information["groups"]]
             }],
-        KeyName=information["keyname"])
+            KeyName=information["keyname"])
     except :
         return "입력을 다시 확인해 주세요"
     instance = instances[0]
