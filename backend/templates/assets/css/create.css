@@ -111,7 +111,7 @@
     margin-top: 0;
 }
 .flex-box .login-box .btn-submit {
-    background: #7ADFFF;
-    color: #fff;
-    font-weight: 600;
+    background: #ffffff;
+    color: #000;
+    /* font-weight: 600; */
 }
