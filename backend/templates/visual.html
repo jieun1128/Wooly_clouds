@@ -24,9 +24,9 @@
     <a class="highlight btn-sub" href="#"> Subnet</a>
     <a class="highlight btn-inst" href="#">Instance</a>
     <a class="highlight btn-s3" href="#"> S3</a>
-    <a class="highlight">IGW</a>
-    <a class="highlight">NAT_GW</a>
-    <a class="./login.html" class="signIn" id="Logout">Logout</a>
+    <a class="highlight btn-igw" href="#">IGW</a>
+    <a class="highlight btn-ngw" href="#">NAT_GW</a>
+    <a class="./login.html" style="cursor: pointer;" class="signIn" id="Logout">Logout</a>
   </div>
 
   <div class="sidenav">
@@ -114,6 +114,8 @@
               <div ${d.data.element == 'instance' ? 'class="instance" data-type="ec2" onclick="showInfo(this)"' : ''}
                   ${d.data.element == 'subnet' ? 'class="subnet" data-type="subnet" onclick="showInfo(this)"' : ''}
                   ${d.data.element == 'VPC' ? 'class="vpc" data-type="vpc" onclick="showInfo(this)"' : ''}
+                  ${d.data.element == 'internet_gateway' ? 'class="igw" data-type="igw" onclick="showInfo(this)"' : ''}
+                  ${d.data.element == 'nat_gateway' ? 'class="ngw" data-type="ngw" onclick="showInfo(this)"' : ''}
                 style="${d.data.element == 's3' ? 'display:none;' : 'display:block;' } background-color:${color}; position:absolute;margin-top:-1px; margin-left:-1px;width:${d.width}px;height:${d.height}px; border-radius: 5px;">
                     <img src="
                     ${d.data.imageUrl}
@@ -157,9 +159,13 @@
       var instance_id = clicked.children[3].innerText;
       instance_title.textContent = instance_id;
       var type = clicked.dataset.type;
+
+      if(type == 'internet_gateway') {
+        type = igw;
+      }
       
       console.log(type);
-
+      
       if(type == 'ec2' || type == 's3') {
         $('.btn-flex').css('display', 'flex');
       } else {
@@ -197,6 +203,12 @@
           } else if(type == 'vpc') {
             var list = ['CidrBlock', 'State'];
             setInfo(list);
+          } else if(type == 'igw') {
+            var list = ['CidrBlock', 'State'];
+            setInfo(list);
+          } else {
+            var list = ['CidrBlock', 'State'];
+            setInfo(list);
           }
 
           function setInfo(list) {
@@ -216,7 +228,7 @@
         {
             alert("수정하는데 오류가 발생하였습니다.");
         },
-      });	
+      });
     }
   </script>
 

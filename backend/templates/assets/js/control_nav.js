@@ -24,6 +24,20 @@ $('.btn-vpc').click(function () {
 		$('.vpc').closest('div').css('border', '5px solid #8F00FF');
 	}, 800);
 });
+$('.btn-igw').click(function () {
+	chart.expandAll();
+	chart.setUpToTheRootHighlighted("").render().fit()
+	setTimeout(function() {
+		$('.igw').closest('div').css('border', '5px solid #8F00FF');
+	}, 800);
+});
+$('.btn-ngw').click(function () {
+	chart.expandAll();
+	chart.setUpToTheRootHighlighted("").render().fit()
+	setTimeout(function() {
+		$('.ngw').closest('div').css('border', '5px solid #8F00FF');
+	}, 800);
+});
 $('.btn-s3').click(function () {
 	$('.s3-box').addClass('active');
 	setTimeout(function() {

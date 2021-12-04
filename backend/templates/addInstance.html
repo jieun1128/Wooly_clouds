@@ -16,18 +16,6 @@
 
     <title>Wooly Cloud</title>
 
-    <style>
-        .navbar { width: 100%; background-color: #7ADFFF; overflow: auto;}
-        .navbar a { float: left; padding: 12px; color: white; text-decoration: none; font-size: 17px;}
-        .navbar a:hover { background-color: #3bc4ee;}
-        .navbar a.active:hover { background-color: #3bc4ee;}
-        a.active { background-color: #fff; color: #000;}
-        .active i { background-color: #fff; color: #000;}
-
-        @media screen and (max-width: 500px) {
-            .navbar a {float: none; display: block;}
-        }
-    </style>
 </head>
 <body>
     <div class="navbar">
@@ -96,7 +84,7 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
-        var type = 'ec2';
+        var type;
         
         $('.instance-option').click(function(){
             if($(this).text() == 'EC2') {
@@ -120,22 +108,22 @@
 
 
         $('.btn-submit').click(function(){
-            console.log('start');
-            if(type = 'ec2') {
-                var data = $('.form-wrap--ec2').serialize();
-            } else if(type = 'vpc') {
-                var data = $('.form-wrap--vpc').serialize();
-            } else if(type = 'subnet') {
-                var data = $('.form-wrap--subnet').serialize();
-            } else if(type = 's3') {
-                var data = $('.form-wrap--s3').serialize();
+            if(type == 'ec2') {
+                var instance_data = $('.form-wrap--ec2').serialize();
+            } else if(type == 'vpc') {
+                var instance_data = $('.form-wrap--vpc').serialize();
+            } else if(type == 'subnet') {
+                var instance_data = $('.form-wrap--subnet').serialize();
+            } else if(type == 's3') {
+                var instance_data = $('.form-wrap--s3').serialize();
             }
+            console.log(instance_data);
             jQuery.ajax({
                 type : "post",
                 url : "/add",
                 dataType : "json",
                 async : true,
-                data: data,
+                data: instance_data,
                 success : function(data)
                 {
                     console.log(data)

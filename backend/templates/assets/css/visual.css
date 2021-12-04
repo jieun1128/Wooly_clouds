@@ -98,8 +98,8 @@ body {
 
 .navbar { width: 100%; background-color: #525bff; overflow: auto;}
 .navbar a { float: left; padding: 12px; color: white; text-decoration: none; font-size: 17px;}
-.navbar a:hover { background-color: #3bc4ee;}
-.navbar a.active:hover { background-color: #3bc4ee;}
+.navbar a:hover { background-color: #fff; color: #000;}
+.navbar a.active:hover { background-color: #fff;}
 a.active { background-color: #fff; color: #000;}
 .active i { background-color: #fff; color: #000;}
 
