@@ -40,7 +40,7 @@ def addVPC(boto_session, information):
     except :
         return "입력을 다시 확인해 주세요"
     vpc = ec2resource.Vpc(vpcInit["Vpc"]["VpcId"])
-    vpc.create_tags(Tags=[{"Key": "Name", "Value": information["Name"]}])
+    vpc.create_tags(Tags=[{"Key": "Name", "Value": information["name"]}])
 
 
     return "생성 완료"

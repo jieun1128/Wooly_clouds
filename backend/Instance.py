@@ -162,7 +162,10 @@ def VPCList(boto_session, session, option, vpcID):
             information["imageUrl"] = imageUrl["VPC"]
             information["id"] = response["VpcId"]
             information["parentId"] = session[2]
-            information["name"] = response["Tags"][0]["Value"]
+            try:
+                information["name"] = response["Tags"][0]["Value"]
+            except:
+                information["name"] = ""
             vpcList.append(information)
         return vpcList
     elif option == 2:                   # 특정 VPC 정보 불러오기 
@@ -172,7 +175,10 @@ def VPCList(boto_session, session, option, vpcID):
             vpcInfo["VpcId"] = response["VpcId"]
             vpcInfo["CidrBlock"] = response["CidrBlock"]
             vpcInfo["State"] = response["State"]
-            vpcInfo["Name"] = response["Tags"][0]["Value"]
+            try:
+                vpcInfo["Name"] = response["Tags"][0]["Value"]
+            except: 
+                vpcInfo["Name"] = ""
 
         except botocore.exceptions.ClientError as e:
             if e.response["Error"]["Code"] == "MissingParameter":
@@ -193,7 +199,10 @@ def subnetList(boto_session, option, subnetID):
             information["imageUrl"] = imageUrl["SUBNET"]
             information["id"] = response["SubnetId"]
             information["parentId"] = response["VpcId"]
-            information["name"] = response["Tags"][0]["Value"]
+            try:
+                information["name"] = response["Tags"][0]["Value"]
+            except:
+                information["name"] = ""
             subnetList.append(information)
         return subnetList
     elif option == 2:
@@ -205,7 +214,10 @@ def subnetList(boto_session, option, subnetID):
             subnetInfo["AvailabilityZone"] = response["AvailabilityZone"]
             subnetInfo["CidrBlock"] = response["CidrBlock"]
             subnetInfo["State"] = response["State"]
-            subnetInfo["Name"] = response["Tags"][0]["Value"]
+            try:
+                subnetInfo["name"] = response["Tags"][0]["Value"]
+            except:
+                subnetInfo["name"] = ""
 
         except botocore.exceptions.ClientError as e:
             if e.response["Error"]["Code"] == "MissingParameter":
@@ -228,7 +240,10 @@ def IGWList(boto_session, session, option, igwID):
             information["id"] = response["InternetGatewayId"]
             information["parentId"] = session[2]
             information["VPC"] = response["Attachments"][0]["VpcId"]
-            information["name"] = response["Tags"][0]["Value"]
+            try:
+                information["name"] = response["Tags"][0]["Value"]
+            except:
+                information["name"] = ""
             igwList.append(information)
         return igwList
     else :
@@ -238,7 +253,10 @@ def IGWList(boto_session, session, option, igwID):
             igwInfo["InternetGatewayId"] = response["InternetGatewayId"]
             igwInfo["VpcId"] = response["Attachments"][0]["VpcId"]
             igwInfo["State"] = response["Attachments"][0]["State"]
-            igwInfo["Name"] = response["Tags"][0]["Value"]
+            try:
+                igwInfo["name"] = response["Tags"][0]["Value"]
+            except:
+                igwInfo["name"] = ""
 
         except botocore.exceptions.ClientError as e:
             if e.response["Error"]["Code"] == "MissingParameter":
@@ -259,7 +277,10 @@ def NGWList(boto_session, option, ngwID):
             information["imageUrl"] = imageUrl["NGW"]
             information["id"] = response["NatGatewayId"]
             information["parentId"] = response["SubnetId"]
-            information["name"] = response["Tags"][0]["Value"]
+            try:
+                information["name"] = response["Tags"][0]["Value"]
+            except:
+                information["name"] = ""
             NGWList.append(information)
         return NGWList
     elif option == 2:
@@ -267,12 +288,15 @@ def NGWList(boto_session, option, ngwID):
             NGWInfo = dict()
             response = ec2_client.describe_nat_gateways(NatGatewayIds=[ngwID]).get("NatGateways")[0]
             NGWInfo["NatGatewayId"] = response["NatGatewayId"]
-            NGWInfo["VpcId"] = response["VpcID"]
+            NGWInfo["VpcId"] = response["VpcId"]
             NGWInfo["SubnetId"] = response["SubnetId"]
             NGWInfo["State"] = response["State"]
-            NGWInfo["Name"] = response["Tags"][0]["Value"]
-            NGWInfo["NetworkInterfaceId"] = response["NatGatewayAddress"][0]["NetworkInterfaceId"]
-            NGWInfo["PrivateIp"] = response["NatGatewayAddress"][0]["PrivateIp"]
+            NGWInfo["NetworkInterfaceId"] = response["NatGatewayAddresses"][0]["NetworkInterfaceId"]
+            NGWInfo["PrivateIp"] = response["NatGatewayAddresses"][0]["PrivateIp"]
+            try:
+                NGWInfo["name"] = response["Tags"][0]["Value"]
+            except:
+                NGWInfo["name"] = ""
 
         except botocore.exceptions.ClientError as e:
             if e.response["Error"]["Code"] == "MissingParameter":

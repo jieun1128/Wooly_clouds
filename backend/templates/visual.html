@@ -63,7 +63,7 @@
     </button>
   </div>
 
-  <a href="./addInstance.html" class="btn-add">Add Instance →</a>
+  <a href="/add" class="btn-add">Add Instance →</a>
 
   <div class="s3-box">
     <div class="s3-img">
@@ -198,16 +198,16 @@
               $('#off').mouseleave(function(){$(this).css("background", "#fff");});
             }
           } else if(type == 'subnet') {
-            var list = ['AvailabilityZone', 'CidrBlock', 'Subnet_Id', 'VpcId', 'State'];
+            var list = ['AvailabilityZone', 'CidrBlock', 'VpcId', 'State'];
             setInfo(list);
           } else if(type == 'vpc') {
             var list = ['CidrBlock', 'State'];
             setInfo(list);
           } else if(type == 'igw') {
-            var list = ['CidrBlock', 'State'];
+            var list = ['VpcId', 'State', 'Name'];
             setInfo(list);
           } else {
-            var list = ['CidrBlock', 'State'];
+            var list = ['VpcId', 'SubnetId', 'State', 'Name', 'NetworkInterfaceId', 'PrivateIp'];
             setInfo(list);
           }
 

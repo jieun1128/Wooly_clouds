@@ -113,7 +113,7 @@ def information(_type, _instanceId):
     elif _type == "subnet" :
         result = subnetList(boto_session, 2, _instanceId)
     elif _type == "igw" :
-        result = IGWList(boto_session, 2, _instanceId)
+        result = IGWList(boto_session, session, 2, _instanceId)
     else :
         result = NGWList(boto_session, 2, _instanceId)
 
@@ -139,25 +139,29 @@ def stopInstance(_option, _type, _instanceId):
 
     return result
 
-@app.route("/add", methods=["POST"])
-def addInstance():
-    userInfo = session.get("boto_session",None)
-    boto_session = boto3.Session(
-        aws_access_key_id= userInfo[0],
-        aws_secret_access_key = userInfo[1],
-        region_name= userInfo[2]
-    )
 
-    if request.form["type"] == "ec2":
-        addEC2(boto_session, request.form)
-    elif request.form["type"] == "s3":
-        addS3(boto_session, userInfo, request.form)
-    elif request.form["type"] == "vpc":
-        addVPC(boto_session, request.form)
-    elif request.form["type"] == "subnet":
-        addSubnet(boto_session, request.form)
-        
-    return ""
+@app.route("/add", methods=["GET","POST"])
+def addInstance():
+    if request.method == "GET":
+        return render_template("addInstance.html")
+    else :
+        userInfo = session.get("boto_session",None)
+        boto_session = boto3.Session(
+            aws_access_key_id= userInfo[0],
+            aws_secret_access_key = userInfo[1],
+            region_name= userInfo[2]
+        )
+
+        if request.form["type"] == "ec2":
+            addEC2(boto_session, request.form)
+        elif request.form["type"] == "s3":
+            addS3(boto_session, userInfo, request.form)
+        elif request.form["type"] == "vpc":
+            addVPC(boto_session, request.form)
+        elif request.form["type"] == "subnet":
+            addSubnet(boto_session, request.form)
+            
+        return redirect(url_for("visualize"))
 
 if __name__ == "__main__":
     app.run(port=3000, debug=True)
