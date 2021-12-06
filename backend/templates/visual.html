@@ -65,14 +65,16 @@
 
   <a href="/add" class="btn-add">Add Instance →</a>
 
-  <div class="s3-box">
-    <div class="s3-img">
-      <img src="https://firebasestorage.googleapis.com/v0/b/confident-35184.appspot.com/o/S3.png?alt=media&token=86dba17a-85e6-446b-b1a5-9581847df29b" alt="s3 이미지">
-    </div>
-    <div id="s3-info">
+  <!-- <div class="s3-list">
+    <div class="s3-box">
+      <div class="s3-img">
+        <img src="https://firebasestorage.googleapis.com/v0/b/confident-35184.appspot.com/o/S3.png?alt=media&token=86dba17a-85e6-446b-b1a5-9581847df29b" alt="s3 이미지">
+      </div>
+      <div id="s3-info">
 
+      </div>
     </div>
-  </div>
+  </div> -->
 
 
   <!-- JS -->
@@ -109,14 +111,14 @@
         })
         .nodeContent(function (d, i, arr, state) {
           const colors = ['#278B8D', '#404040', '#0C5C73', '#33C6CB'];
-          const color = d.data.element == 's3' ? '#c2c2c2' : colors[d.depth % colors.length];
+          const color = d.data.id == 's3root' ? '#c2c2c2' : colors[d.depth % colors.length];
           return `
               <div ${d.data.element == 'instance' ? 'class="instance" data-type="ec2" onclick="showInfo(this)"' : ''}
                   ${d.data.element == 'subnet' ? 'class="subnet" data-type="subnet" onclick="showInfo(this)"' : ''}
                   ${d.data.element == 'VPC' ? 'class="vpc" data-type="vpc" onclick="showInfo(this)"' : ''}
                   ${d.data.element == 'internet_gateway' ? 'class="igw" data-type="igw" onclick="showInfo(this)"' : ''}
                   ${d.data.element == 'nat_gateway' ? 'class="ngw" data-type="ngw" onclick="showInfo(this)"' : ''}
-                style="${d.data.element == 's3' ? 'display:none;' : 'display:block;' } background-color:${color}; position:absolute;margin-top:-1px; margin-left:-1px;width:${d.width}px;height:${d.height}px; border-radius: 5px;">
+                style="background-color:${color}; position:absolute;margin-top:-1px; margin-left:-1px;width:${d.width}px;height:${d.height}px; border-radius: 5px;">
                     <img src="
                     ${d.data.imageUrl}
                     " style="position:absolute;margin-top:5px;margin-left:${5}px;width:40px;height:40px; top:10px" />
