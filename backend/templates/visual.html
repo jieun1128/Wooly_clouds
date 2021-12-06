@@ -194,7 +194,7 @@
           $('.instance-info-wrap').empty();
           if(type == 'ec2') {
             var list = ['GroupId', 'GroupName', 'ImageId', 'InstanceType', 'KeyName', 'Subnet_Id', 'VpcId', 'State'];
-            setInfo(list);
+            setInfo(list, type);
             if(result[list[list.length-1]] == 'stopped') {
               $('#off').text('시작');
               $('#off').mouseover(function(){$(this).css("background", "#7ADFFF");});
@@ -214,12 +214,8 @@
             setInfo(list, type);
           }
 
-          function setInfo(list, type) {
-            if(type == 'vpc'){
-              $('#Name').text(result['Name']);  
-            } else {
-              $('#Name').text(result['name']);
-            }
+          function setInfo(list) {
+            $('#Name').text(result['name']);
             // console.log(result)
             for(var i=0; i < list.length; i++){
               var $title = $('<p class="instance-info-label instance-info-label-' + i +'"></p>');
