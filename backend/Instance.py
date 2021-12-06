@@ -116,12 +116,20 @@ def s3List(boto_session, session, option, bucketName):
         list_buckets_resp = s3_client.list_buckets()
         bucketList = []
 
+        information = {}
+        information["element"] = "s3"
+        information["imageUrl"] = imageUrl["S3"]
+        information["id"] = "s3root"
+        information["parentId"] = session[2]
+        information["name"] = None
+        bucketList.append(information)
+
         for bucket in list_buckets_resp["Buckets"]:
             information = {}
             information["element"] = "s3"
             information["imageUrl"] = imageUrl["S3"]
             information["id"] = bucket["Name"]
-            information["parentId"] = session[2]
+            information["parentId"] = "s3root"
             information["name"] = None
             bucketList.append(information)
 
