@@ -39,10 +39,15 @@ $('.btn-ngw').click(function () {
 	}, 800);
 });
 $('.btn-s3').click(function () {
-	$('.s3-box').addClass('active');
+	// $('.s3-box').addClass('active');
+	// setTimeout(function() {
+	// 	$('.s3-box').removeClass('active');
+	// }, 2000);
+	chart.expandAll();
+	chart.setUpToTheRootHighlighted("").render().fit()
 	setTimeout(function() {
-		$('.s3-box').removeClass('active');
-	}, 2000);
+		$('.s3').closest('div').css('border', '5px solid #8F00FF');
+	}, 800);
 });
 
 $('.closebtn').click(function () {

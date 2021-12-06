@@ -111,13 +111,14 @@
         })
         .nodeContent(function (d, i, arr, state) {
           const colors = ['#278B8D', '#404040', '#0C5C73', '#33C6CB'];
-          const color = d.data.id == 's3root' ? '#c2c2c2' : colors[d.depth % colors.length];
+          const color = d.data.element == 's3' ? '#c2c2c2' : colors[d.depth % colors.length];
           return `
               <div ${d.data.element == 'instance' ? 'class="instance" data-type="ec2" onclick="showInfo(this)"' : ''}
                   ${d.data.element == 'subnet' ? 'class="subnet" data-type="subnet" onclick="showInfo(this)"' : ''}
                   ${d.data.element == 'VPC' ? 'class="vpc" data-type="vpc" onclick="showInfo(this)"' : ''}
                   ${d.data.element == 'internet_gateway' ? 'class="igw" data-type="igw" onclick="showInfo(this)"' : ''}
                   ${d.data.element == 'nat_gateway' ? 'class="ngw" data-type="ngw" onclick="showInfo(this)"' : ''}
+                  ${d.data.element == 's3' ? 'class="s3" data-type="s3" onclick="showInfo(this)"' : ''}
                 style="background-color:${color}; position:absolute;margin-top:-1px; margin-left:-1px;width:${d.width}px;height:${d.height}px; border-radius: 5px;">
                     <img src="
                     ${d.data.imageUrl}
@@ -201,20 +202,25 @@
             }
           } else if(type == 'subnet') {
             var list = ['AvailabilityZone', 'CidrBlock', 'VpcId', 'State'];
-            setInfo(list);
+            setInfo(list, type);
           } else if(type == 'vpc') {
             var list = ['CidrBlock', 'State'];
-            setInfo(list);
+            setInfo(list, type);
           } else if(type == 'igw') {
             var list = ['VpcId', 'State', 'Name'];
-            setInfo(list);
+            setInfo(list, type);
           } else {
             var list = ['VpcId', 'SubnetId', 'State', 'Name', 'NetworkInterfaceId', 'PrivateIp'];
-            setInfo(list);
+            setInfo(list, type);
           }
 
-          function setInfo(list) {
-            $('#Name').text(result['Name']);
+          function setInfo(list, type) {
+            if(type == 'vpc'){
+              $('#Name').text(result['Name']);  
+            } else {
+              $('#Name').text(result['name']);
+            }
+            // console.log(result)
             for(var i=0; i < list.length; i++){
               var $title = $('<p class="instance-info-label instance-info-label-' + i +'"></p>');
               $('.instance-info-wrap').append($title);
