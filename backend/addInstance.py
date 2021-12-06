@@ -25,9 +25,6 @@ def addEC2(boto_session, information):
     instance.create_tags(
             Tags=[{"Key": "Name", "Value": information["name"]}])
 
-    # 생성될 때까지 기다리기 
-    instance.wait_until_running()
-
     return "생성 완료"
 
 
