@@ -51,10 +51,13 @@ def ec2List(boto_session, option, instanceID):
             ec2Info["State"] = response["State"]["Name"]
             ec2Info["Subnet_Id"] = response["SubnetId"]
             ec2Info["VpcId"] = response["VpcId"]
-            ec2Info["Name"] = response["Tags"][0]["Value"]
             ec2Info["KeyName"] = response["KeyName"]
             ec2Info["GroupName"] = response["SecurityGroups"][0]["GroupName"]
             ec2Info["GroupId"] = response["SecurityGroups"][0]["GroupId"]
+            try :
+                ec2Info["name"] = response["Tags"][0]["Value"]
+            except:
+                ec2Info["name"] = ""
             if response["State"]["Name"] == "running":
                 ec2Info["PrivateDnsName"] = response["PrivateDnsName"]
                 ec2Info["PrivateIpAddress"] = response["PrivateIpAddress"]
@@ -184,9 +187,9 @@ def VPCList(boto_session, session, option, vpcID):
             vpcInfo["CidrBlock"] = response["CidrBlock"]
             vpcInfo["State"] = response["State"]
             try:
-                vpcInfo["Name"] = response["Tags"][0]["Value"]
+                vpcInfo["name"] = response["Tags"][0]["Value"]
             except: 
-                vpcInfo["Name"] = ""
+                vpcInfo["name"] = ""
 
         except botocore.exceptions.ClientError as e:
             if e.response["Error"]["Code"] == "MissingParameter":

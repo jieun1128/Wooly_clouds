@@ -49,16 +49,16 @@ Swagger: http://localhost:5000/swagger
 2) 원하는 인프라를 선택하여 정보를 입력하면 새로 생성이 가능합니다.
 ```
 ### 1) Infra Visualization
-<img width="1426" alt="스크린샷 2021-12-05 오후 9 54 49" src="https://user-images.githubusercontent.com/49158155/144747408-b850682a-791a-4d4e-8f1d-ed520caa2ff7.png">
+<img width="1432" alt="스크린샷 2021-12-06 오후 11 42 46" src="https://user-images.githubusercontent.com/49158155/144865988-620b68ac-bf1e-4ad6-90ae-39d50460b9cf.png">
 - 시각화 창에 들어가면 Tree Chart를 이용하여 인프라의 전체적인 구조를 확인 할 수 있습니다.
-<img width="1421" alt="스크린샷 2021-12-05 오후 9 57 21" src="https://user-images.githubusercontent.com/49158155/144747484-e591b18c-84e0-4f77-9fe4-728705a07a8a.png">
+<img width="1435" alt="스크린샷 2021-12-06 오후 11 43 17" src="https://user-images.githubusercontent.com/49158155/144866053-830dea83-c886-4a27-8e9f-4a1a14887bd2.png">
 - 또한 인스턴스 선택 시 상세 정보를 확인 할 수 있습니다.
 
 ### 2) Modify Infratructure
 <img width="1431" alt="스크린샷 2021-12-05 오후 10 01 13" src="https://user-images.githubusercontent.com/49158155/144747648-702d282e-8677-4339-910e-95c5fd401cf3.png">
 - addInstance창에 들어가서 생성할 인프라 선택 후 정보를 입력하면 새로운 인스턴스 생성이 가능합니다.
-<img width="1126" alt="스크린샷 2021-12-05 오후 10 14 20" src="https://user-images.githubusercontent.com/49158155/144748053-d268fb66-1924-4029-997d-b0a8080b92c4.png">
-- ec2의 경우 상세 정보 창에서 인스턴스 종료 및 삭제가 가능합니다.
+<img width="1394" alt="스크린샷 2021-12-07 오전 12 49 08" src="https://user-images.githubusercontent.com/49158155/144877397-93236c64-dedd-475f-ae14-0cab83b7f6d9.png">
+- ec2의 경우 상세 정보 창에서 인스턴스 시작/종료 및 삭제가 가능합니다.
 
 ---
 ## Team Member
